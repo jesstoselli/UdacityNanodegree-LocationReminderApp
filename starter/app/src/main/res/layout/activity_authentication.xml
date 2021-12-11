@@ -123,6 +123,7 @@
             android:layout_marginRight="@dimen/margin_normal"
             android:drawableStart="@drawable/google_icon"
             android:drawableLeft="@drawable/google_icon"
+            android:elevation="@dimen/padding_tiny"
             android:text="@string/authentication_signUpWithGoogle" />
 
     </LinearLayout>
@@ -134,6 +135,7 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_email"
         android:drawableLeft="@drawable/ic_email"
+        android:elevation="@dimen/padding_tiny"
         android:text="@string/authentication_signInWithEmail"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/tv_signInWithGoogle"
@@ -147,6 +149,7 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/google_icon"
         android:drawableLeft="@drawable/google_icon"
+        android:elevation="@dimen/padding_tiny"
         android:text="@string/authentication_signInWithGoogle"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/tv_signup"
