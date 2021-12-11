@@ -6,15 +6,164 @@
     android:layout_height="match_parent"
     tools:context=".authentication.AuthenticationActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/welcome_to_the_location_reminder_app"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_large"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_authenticationBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitEnd"
+        android:src="@drawable/bg_image" />
+
+    <LinearLayout
+        android:layout_width="272dp"
+        android:layout_height="365dp"
+        android:background="@drawable/round_corners_orange"
+        android:orientation="vertical"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_signUpForANewAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_corners_title"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/padding_medium"
+            android:text="@string/authentication_signUpForANewAccount"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_labelForEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:fontFamily="@font/roboto_light"
+            android:text="@string/authentication_email"
+            android:textColor="@color/colorPrimary" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:background="@drawable/round_corners_input_text"
+            android:inputType="textEmailAddress" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_labelForPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:fontFamily="@font/roboto_light"
+            android:text="@string/authentication_password"
+            android:textColor="@color/colorPrimary" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:background="@drawable/round_corners_input_text"
+            android:inputType="textEmailAddress" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_signUp"
+            style="@style/SignUpButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:elevation="@dimen/padding_tiny"
+            android:gravity="center"
+            android:text="@string/authentication_signup" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:fontFamily="@font/roboto_light"
+            android:gravity="center_horizontal"
+            android:text="@string/authentication_message"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_tiny" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/tv_signUpWithGoogle"
+            style="@style/SignUpButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:drawableStart="@drawable/google_icon"
+            android:drawableLeft="@drawable/google_icon"
+            android:text="@string/authentication_signUpWithGoogle" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_signInWithEmail"
+        style="@style/AuthenticationButton"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_email"
+        android:drawableLeft="@drawable/ic_email"
+        android:text="@string/authentication_signInWithEmail"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/tv_signInWithGoogle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/tv_signInWithGoogle"
+        style="@style/AuthenticationButton"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/google_icon"
+        android:drawableLeft="@drawable/google_icon"
+        android:text="@string/authentication_signInWithGoogle"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/tv_signup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_double"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/authentication_signUpForANewAccountUnderlined"
+        android:textColor="@color/colorSecondaryDark"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
