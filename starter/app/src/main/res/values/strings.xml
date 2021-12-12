@@ -52,4 +52,8 @@
     <string name="authentication_message">Or you may sign up with your Google account:</string>
     <string name="authentication_signUpWithGoogle">Sign up with Google</string>
 
+    <!-- Accessibility -->
+    <string name="background_image_description">Background image, house with a location pin over it.</string>
+    <string name="google_maps_pin">Google Maps pin</string>
+
 </resources>

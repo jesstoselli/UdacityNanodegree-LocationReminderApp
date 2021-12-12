@@ -10,63 +10,92 @@
             type="com.udacity.project4.locationreminders.reminderslist.RemindersListViewModel" />
     </data>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refreshLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".locationreminders.reminderslist.ReminderListFragment">
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_image">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white">
+            android:layout_height="wrap_content"
+            tools:context=".locationreminders.reminderslist.ReminderListFragment">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/reminderssRecyclerView"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:liveData="@{viewModel.remindersList}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_margin="@dimen/padding_medium">
 
-            <TextView
-                android:id="@+id/noDataTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_no_data"
-                android:fadeVisible="@{viewModel.showNoData.booleanValue()}"
-                android:gravity="center"
-                android:text="@string/no_data"
-                android:textSize="@dimen/text_size_large"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/iv_authenticationBg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/background_image_description"
+                    android:scaleType="fitEnd" />
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
-                android:gravity="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/tv_remindersTitle"
+                    style="@style/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/padding_medium"
+                    android:text="Your Reminders"
+                    app:layout_constraintBottom_toTopOf="@id/remindersRecyclerView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/addReminderFAB"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_normal"
-                android:src="@drawable/ic_add"
-                app:fabSize="normal"
-                app:layout_anchor="@id/reminderssRecyclerView"
-                app:layout_anchorGravity="bottom|right|end"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/remindersRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_medium"
+                    android:layout_marginEnd="@dimen/padding_medium"
+                    android:background="@drawable/round_corners_background_orange"
+                    android:liveData="@{viewModel.remindersList}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_remindersTitle"
+                    tools:listitem="@layout/it_reminder" />
+
+                <!--            <TextView-->
+                <!--                android:id="@+id/noDataTextView"-->
+                <!--                android:layout_width="wrap_content"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:drawableTop="@drawable/ic_no_data"-->
+                <!--                android:fadeVisible="@{viewModel.showNoData.booleanValue()}"-->
+                <!--                android:gravity="center"-->
+                <!--                android:text="@string/no_data"-->
+                <!--                android:textSize="@dimen/text_size_large"-->
+                <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                app:layout_constraintHorizontal_bias="0.498"-->
+                <!--                app:layout_constraintStart_toStartOf="parent"-->
+                <!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+                <!--            <ProgressBar-->
+                <!--                android:id="@+id/progressBar"-->
+                <!--                android:layout_width="wrap_content"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:fadeVisible="@{viewModel.showLoading.booleanValue()}"-->
+                <!--                android:gravity="center"-->
+                <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                app:layout_constraintStart_toStartOf="parent"-->
+                <!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/addReminderFAB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_normal"
+                    android:src="@drawable/ic_add"
+                    app:fabSize="normal"
+                    app:layout_anchor="@id/remindersRecyclerView"
+                    app:layout_anchorGravity="bottom|right|end"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
 </layout>

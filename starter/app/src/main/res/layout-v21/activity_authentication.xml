@@ -49,12 +49,12 @@
         android:drawableLeft="@drawable/ic_email"
         android:text="@string/authentication_signInWithEmail"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/tv_signInWithGoogle"
+        app:layout_constraintBottom_toTopOf="@id/btn_signInWithGoogle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/tv_signInWithGoogle"
+        android:id="@+id/btn_signInWithGoogle"
         style="@style/AuthenticationButton"
         android:layout_width="240dp"
         android:layout_height="wrap_content"

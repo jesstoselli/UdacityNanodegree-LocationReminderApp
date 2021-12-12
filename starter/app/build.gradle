@@ -16,6 +16,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -23,8 +24,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = '1.8'
     }
     testOptions.unitTests {
         includeAndroidResources = true
@@ -37,6 +42,7 @@ android {
     //}
     buildFeatures {
         dataBinding true
+        viewBinding true
     }
 }
 
@@ -78,6 +84,11 @@ dependencies {
     //Koin
     implementation "org.koin:koin-android:$koinVersion"
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
+
+    // Firebase
+    implementation 'com.firebaseui:firebase-ui-auth:5.0.0'
+    implementation platform('com.google.firebase:firebase-bom:29.0.1')
+    implementation 'com.google.firebase:firebase-auth'
 
 
     // Dependencies for local unit tests

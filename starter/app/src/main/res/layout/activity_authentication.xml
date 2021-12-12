@@ -6,14 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".authentication.AuthenticationActivity">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/iv_authenticationBg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/background_image_description"
         android:scaleType="fitEnd"
         android:src="@drawable/bg_image" />
 
     <LinearLayout
+        android:id="@+id/linearLayout_signUp"
         android:layout_width="272dp"
         android:layout_height="365dp"
         android:background="@drawable/round_corners_orange"
@@ -24,18 +26,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/tv_signUpForANewAccount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_corners_title"
+            style="@style/header"
             android:gravity="center_horizontal"
-            android:padding="@dimen/padding_medium"
             android:text="@string/authentication_signUpForANewAccount"
-            android:textAlignment="center"
-            android:textColor="@color/white" />
+            android:textAlignment="center" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/tv_labelForEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +46,7 @@
             android:text="@string/authentication_email"
             android:textColor="@color/colorPrimary" />
 
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
             android:id="@+id/et_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,6 +54,7 @@
             android:layout_marginLeft="@dimen/margin_normal"
             android:layout_marginEnd="@dimen/margin_normal"
             android:layout_marginRight="@dimen/margin_normal"
+            android:autofillHints=""
             android:background="@drawable/round_corners_input_text"
             android:inputType="textEmailAddress" />
 
@@ -128,7 +127,7 @@
 
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/btn_signInWithEmail"
         style="@style/AuthenticationButton"
         android:layout_width="240dp"
@@ -138,12 +137,12 @@
         android:elevation="@dimen/padding_tiny"
         android:text="@string/authentication_signInWithEmail"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/tv_signInWithGoogle"
+        app:layout_constraintBottom_toTopOf="@id/btn_signInWithGoogle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/tv_signInWithGoogle"
+    <Button
+        android:id="@+id/btn_signInWithGoogle"
         style="@style/AuthenticationButton"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
@@ -156,7 +155,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <TextView
         android:id="@+id/tv_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
