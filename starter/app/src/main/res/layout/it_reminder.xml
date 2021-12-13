@@ -27,7 +27,7 @@
                 android:id="@+id/iv_googleMapsPin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/google_maps_pin"
+                android:contentDescription="@string/accessibility_googleMapsPin"
                 android:src="@drawable/ic_google_maps_pin"
                 app:layout_constraintBottom_toBottomOf="@id/description"
                 app:layout_constraintStart_toStartOf="parent"

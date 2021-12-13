@@ -13,63 +13,99 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@drawable/bg_image"
+        android:padding="@dimen/text_size_medium">
 
-        <EditText
-            android:id="@+id/reminderTitle"
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/accessibility_backgroundImageDescription"
+            android:src="@drawable/round_corners_background_orange" />
+
+        <TextView
+            android:id="@+id/tv_newReminderTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/round_corners_title"
+            android:fontFamily="@font/roboto_medium"
+            android:padding="@dimen/padding_small"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="New reminder" />
+
+        <EditText
+            android:id="@+id/et_reminderTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:autofillHints="true"
             android:hint="@string/reminder_title"
+            android:inputType="text"
             android:text="@={viewModel.reminderTitle}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tv_newReminderTitle" />
 
         <EditText
-            android:id="@+id/reminderDescription"
+            android:id="@+id/et_reminderDescription"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:autofillHints="true"
             android:gravity="start"
             android:hint="@string/reminder_desc"
+            android:inputType="textLongMessage"
             android:lines="10"
             android:text="@={viewModel.reminderDescription}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/reminderTitle" />
+            app:layout_constraintTop_toBottomOf="@id/et_reminderTitle" />
 
         <TextView
-            android:id="@+id/selectLocation"
+            android:id="@+id/tv_selectLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:drawableStart="@drawable/ic_location"
-            android:drawableLeft="@drawable/ic_location"
+            android:drawablePadding="@dimen/padding_small"
             android:focusable="true"
             android:gravity="center_vertical"
             android:text="@string/reminder_location"
             android:textColor="@color/black"
+            app:drawableLeftCompat="@drawable/ic_google_maps_pin"
+            app:drawableStartCompat="@drawable/ic_google_maps_pin"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/reminderDescription" />
+            app:layout_constraintTop_toBottomOf="@id/et_reminderDescription" />
 
         <TextView
-            android:id="@+id/selectedLocation"
+            android:id="@+id/tv_selectedLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_normal"
             android:layout_marginRight="@dimen/margin_normal"
             android:text="@{viewModel.reminderSelectedLocationStr}"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@id/selectLocation"
+            app:layout_constraintBottom_toBottomOf="@id/tv_selectLocation"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/selectLocation"
+            app:layout_constraintTop_toTopOf="@id/tv_selectLocation"
             tools:text="Location" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/saveReminder"
+            android:id="@+id/fab_saveReminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_normal"
+            android:contentDescription="@string/accessibility_fabSaveReminder"
             android:fadeVisible="@{!viewModel.showLoading.booleanValue()}"
             android:src="@drawable/ic_save"
             app:fabSize="normal"

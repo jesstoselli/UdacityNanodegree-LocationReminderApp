@@ -4,15 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_image"
     tools:context=".authentication.AuthenticationActivity">
-
-    <ImageView
-        android:id="@+id/iv_authenticationBg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/background_image_description"
-        android:scaleType="fitEnd"
-        android:src="@drawable/bg_image" />
 
     <LinearLayout
         android:id="@+id/linearLayout_signUp"
@@ -20,7 +13,7 @@
         android:layout_height="365dp"
         android:background="@drawable/round_corners_orange"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,11 +47,12 @@
             android:layout_marginLeft="@dimen/margin_normal"
             android:layout_marginEnd="@dimen/margin_normal"
             android:layout_marginRight="@dimen/margin_normal"
-            android:autofillHints=""
+            android:autofillHints="true"
             android:background="@drawable/round_corners_input_text"
+            android:hint="@string/accessibility_editTextEmail"
             android:inputType="textEmailAddress" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/tv_labelForPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,7 +65,7 @@
             android:text="@string/authentication_password"
             android:textColor="@color/colorPrimary" />
 
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="30dp"
@@ -79,10 +73,12 @@
             android:layout_marginLeft="@dimen/margin_normal"
             android:layout_marginEnd="@dimen/margin_normal"
             android:layout_marginRight="@dimen/margin_normal"
+            android:autofillHints="true"
             android:background="@drawable/round_corners_input_text"
-            android:inputType="textEmailAddress" />
+            android:hint="@string/accessibility_editTextPassword"
+            android:inputType="textPassword" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/btn_signUp"
             style="@style/SignUpButton"
             android:layout_width="match_parent"
@@ -96,7 +92,7 @@
             android:gravity="center"
             android:text="@string/authentication_signup" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
@@ -111,7 +107,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_size_tiny" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/tv_signUpWithGoogle"
             style="@style/SignUpButton"
             android:layout_width="match_parent"

@@ -13,6 +13,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.udacity.project4.R
 import com.udacity.project4.databinding.ActivityAuthenticationBinding
@@ -80,8 +82,8 @@ class AuthenticationActivity : AppCompatActivity() {
                     with(binding) {
                         btnSignInWithEmail.visibility = GONE
                         btnSignInWithGoogle.visibility = GONE
-                        tvSignUpForANewAccount?.visibility = GONE
-                        linearLayoutSignUp?.visibility = VISIBLE
+                        tvSignUpForANewAccount.visibility = GONE
+                        linearLayoutSignUp.visibility = VISIBLE
                     }
                 }
             }

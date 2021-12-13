@@ -53,7 +53,12 @@
     <string name="authentication_signUpWithGoogle">Sign up with Google</string>
 
     <!-- Accessibility -->
-    <string name="background_image_description">Background image, house with a location pin over it.</string>
-    <string name="google_maps_pin">Google Maps pin</string>
+    <string name="accessibility_backgroundImageDescription">Background image, house with a location pin over it.</string>
+    <string name="accessibility_googleMapsPin">Google Maps pin</string>
+    <string name="accessibility_editTextEmail">Add your email</string>
+    <string name="accessibility_editTextPassword">Add your email</string>
+    <string name="accessibility_editTextTitle">Add your reminder title</string>
+    <string name="accessibility_editTextDescription">Add your reminder description</string>
+    <string name="accessibility_fabSaveReminder">FAB Save reminder</string>
 
 </resources>
