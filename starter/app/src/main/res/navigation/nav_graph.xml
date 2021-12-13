@@ -13,6 +13,10 @@
             app:destination="@id/saveReminderFragment" />
     </fragment>
     <activity
+        android:id="@+id/authenticationActivity"
+        android:name="com.udacity.project4.authentication.AuthenticationActivity"
+        android:label="AuthenticationActivity" />
+    <activity
         android:id="@+id/remindersActivity"
         android:name="com.udacity.project4.locationreminders.RemindersActivity"
         android:label="RemindersActivity" />

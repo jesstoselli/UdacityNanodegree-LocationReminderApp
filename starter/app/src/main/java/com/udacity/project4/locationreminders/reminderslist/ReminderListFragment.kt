@@ -1,8 +1,15 @@
 package com.udacity.project4.locationreminders.reminderslist
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
+import com.firebase.ui.auth.AuthUI
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
@@ -19,7 +26,7 @@ class ReminderListFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(
                 inflater,
@@ -71,16 +78,22 @@ class ReminderListFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logout -> {
-//                TODO: add the logout implementation
+                logoutFromApp()
+                // TODO: Check if this is going to navigate back to Authentication Activity
+                Navigation.findNavController(binding.root.rootView)
+                    .navigate(R.id.authenticationActivity)
             }
         }
         return super.onOptionsItemSelected(item)
 
     }
 
+    private fun logoutFromApp() {
+        AuthUI.getInstance().signOut(requireContext())
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-//        display logout as menu item
         inflater.inflate(R.menu.main_menu, menu)
     }
 

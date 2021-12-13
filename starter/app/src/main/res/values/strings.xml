@@ -52,6 +52,9 @@
     <string name="authentication_message">Or you may sign up with your Google account:</string>
     <string name="authentication_signUpWithGoogle">Sign up with Google</string>
 
+    <!-- Reminder Screen -->
+    <string name="location"><u>See location on map</u></string>
+
     <!-- Accessibility -->
     <string name="accessibility_backgroundImageDescription">Background image, house with a location pin over it.</string>
     <string name="accessibility_googleMapsPin">Google Maps pin</string>
@@ -60,5 +63,7 @@
     <string name="accessibility_editTextTitle">Add your reminder title</string>
     <string name="accessibility_editTextDescription">Add your reminder description</string>
     <string name="accessibility_fabSaveReminder">FAB Save reminder</string>
+    <string name="accessibility_fabAddReminder">FAB Add reminder</string>
+    <string name="reminders_yourReminders">Your Reminders</string>
 
 </resources>

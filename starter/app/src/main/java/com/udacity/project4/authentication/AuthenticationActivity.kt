@@ -45,14 +45,6 @@ class AuthenticationActivity : AppCompatActivity() {
             btnSignInWithGoogle.setOnClickListener { launchSignInFlow() }
             btnSignInWithEmail.setOnClickListener { launchSignInFlow() }
         }
-
-            // Implement the create account and sign in using FirebaseUI, use sign in using email and sign in using Google
-
-            // If the user was authenticated, send him to RemindersActivity
-
-            // A bonus is to customize the sign in flow to look nice using :
-            // https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md#custom-layout
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -77,6 +69,7 @@ class AuthenticationActivity : AppCompatActivity() {
             when (authenticationState) {
                 AuthenticationViewModel.AuthenticationState.AUTHENTICATED -> {
                     Navigation.findNavController(view).navigate(R.id.remindersActivity);
+                    binding.linearLayoutSignUp.visibility = GONE
                 }
                 else -> {
                     with(binding) {

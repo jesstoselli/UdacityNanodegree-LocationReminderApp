@@ -39,7 +39,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/padding_medium"
-                    android:text="Your Reminders"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/reminders_yourReminders"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_medium"
                     app:layout_constraintBottom_toTopOf="@id/remindersRecyclerView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -58,37 +61,38 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_remindersTitle"
                     tools:listitem="@layout/it_reminder" />
 
-                <!--            <TextView-->
-                <!--                android:id="@+id/noDataTextView"-->
-                <!--                android:layout_width="wrap_content"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:drawableTop="@drawable/ic_no_data"-->
-                <!--                android:fadeVisible="@{viewModel.showNoData.booleanValue()}"-->
-                <!--                android:gravity="center"-->
-                <!--                android:text="@string/no_data"-->
-                <!--                android:textSize="@dimen/text_size_large"-->
-                <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--                app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                app:layout_constraintHorizontal_bias="0.498"-->
-                <!--                app:layout_constraintStart_toStartOf="parent"-->
-                <!--                app:layout_constraintTop_toTopOf="parent" />-->
+                <TextView
+                    android:id="@+id/tv_noDataTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fadeVisible="@{viewModel.showNoData.booleanValue()}"
+                    android:gravity="center"
+                    android:text="@string/no_data"
+                    android:textSize="@dimen/text_size_large"
+                    app:drawableTopCompat="@drawable/ic_no_data"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <!--            <ProgressBar-->
-                <!--                android:id="@+id/progressBar"-->
-                <!--                android:layout_width="wrap_content"-->
-                <!--                android:layout_height="wrap_content"-->
-                <!--                android:fadeVisible="@{viewModel.showLoading.booleanValue()}"-->
-                <!--                android:gravity="center"-->
-                <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--                app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                app:layout_constraintStart_toStartOf="parent"-->
-                <!--                app:layout_constraintTop_toTopOf="parent" />-->
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
+                    android:gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/addReminderFAB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_normal"
+                    android:contentDescription="@string/accessibility_fabAddReminder"
                     android:src="@drawable/ic_add"
                     app:fabSize="normal"
                     app:layout_anchor="@id/remindersRecyclerView"
