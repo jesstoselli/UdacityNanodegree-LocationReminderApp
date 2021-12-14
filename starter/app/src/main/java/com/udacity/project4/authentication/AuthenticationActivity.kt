@@ -4,20 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
+import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.udacity.project4.R
 import com.udacity.project4.databinding.ActivityAuthenticationBinding
+import com.udacity.project4.locationreminders.RemindersActivity
 
 /**
  * This class should be the starting point of the app, It asks the users to sign in / register, and redirects the
@@ -25,30 +20,29 @@ import com.udacity.project4.databinding.ActivityAuthenticationBinding
  */
 class AuthenticationActivity : AppCompatActivity() {
 
-    companion object {
-        const val TAG = "AuthenticationActivity"
-        const val SIGN_IN_RESULT_CODE = 1001
-    }
-
     private lateinit var binding: ActivityAuthenticationBinding
-
-    private val authenticationViewModel by viewModels<AuthenticationViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityAuthenticationBinding.inflate(layoutInflater)
 
-        observeAuthenticationState(binding.root)
+        isUserLoggedIn()
+        launchSignInFlow()
+    }
 
-        with(binding) {
-            btnSignInWithGoogle.setOnClickListener { launchSignInFlow() }
-            btnSignInWithEmail.setOnClickListener { launchSignInFlow() }
+    private fun isUserLoggedIn() {
+        val firebaseAuthentication = FirebaseAuth.getInstance()
+
+        if (firebaseAuthentication.currentUser != null) {
+            startActivity(Intent(this, RemindersActivity::class.java))
+            finish()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == SIGN_IN_RESULT_CODE) {
             val response = IdpResponse.fromResultIntent(data)
 
@@ -57,30 +51,13 @@ class AuthenticationActivity : AppCompatActivity() {
                     TAG,
                     "Successfully signed in user ${FirebaseAuth.getInstance().currentUser?.displayName}"
                 )
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                startActivity(Intent(this, AuthenticationActivity::class.java))
+                finish()
             } else {
                 Log.i(TAG, "Sign in unsuccessful ${response?.error?.errorCode}")
             }
         }
-    }
-
-    private fun observeAuthenticationState(view: View) {
-
-        authenticationViewModel.authenticationState.observe(this, Observer { authenticationState ->
-            when (authenticationState) {
-                AuthenticationViewModel.AuthenticationState.AUTHENTICATED -> {
-                    Navigation.findNavController(view).navigate(R.id.remindersActivity);
-                    binding.linearLayoutSignUp.visibility = GONE
-                }
-                else -> {
-                    with(binding) {
-                        btnSignInWithEmail.visibility = GONE
-                        btnSignInWithGoogle.visibility = GONE
-                        tvSignUpForANewAccount.visibility = GONE
-                        linearLayoutSignUp.visibility = VISIBLE
-                    }
-                }
-            }
-        })
     }
 
     private fun launchSignInFlow() {
@@ -93,8 +70,21 @@ class AuthenticationActivity : AppCompatActivity() {
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
+                .setAuthMethodPickerLayout(
+                    AuthMethodPickerLayout
+                        .Builder(R.layout.layout_auth_picker)
+                        .setGoogleButtonId(R.id.btn_signInWithGoogle)
+                        .setEmailButtonId(R.id.btn_signInWithEmail)
+                        .build()
+                )
+                .setTheme(R.style.AppTheme)
                 .build(),
             SIGN_IN_RESULT_CODE
         )
+    }
+
+    companion object {
+        const val TAG = "AuthenticationActivity"
+        const val SIGN_IN_RESULT_CODE = 1001
     }
 }

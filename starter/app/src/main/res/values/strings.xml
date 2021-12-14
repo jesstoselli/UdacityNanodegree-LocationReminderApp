@@ -51,9 +51,15 @@
     <string name="authentication_signup">Sign Up</string>
     <string name="authentication_message">Or you may sign up with your Google account:</string>
     <string name="authentication_signUpWithGoogle">Sign up with Google</string>
+    <string name="authentication_logOutFailed">Logout failed</string>
+    <string name="authentication_loginMethod">Select your preferred login method.</string>
+    <string name="authentication_registerOrLogin">Sing in or register</string>
+    <string name="authentication_loginRequired">Welcome! Please, sign in or register for a new account.</string>
 
     <!-- Reminder Screen -->
     <string name="location"><u>See location on map</u></string>
+    <string name="reminders_yourReminders">Your Reminders</string>
+    <string name="map_fragment">map_fragment</string>
 
     <!-- Select Location Screen -->
     <string name="selectLocation_saveThisLocation">Save this location</string>
@@ -67,7 +73,5 @@
     <string name="accessibility_editTextDescription">Add your reminder description</string>
     <string name="accessibility_fabSaveReminder">FAB Save reminder</string>
     <string name="accessibility_fabAddReminder">FAB Add reminder</string>
-    <string name="reminders_yourReminders">Your Reminders</string>
-    <string name="map_fragment">map_fragment</string>
 
 </resources>

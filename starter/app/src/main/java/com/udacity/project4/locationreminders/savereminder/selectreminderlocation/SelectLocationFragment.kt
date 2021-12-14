@@ -186,7 +186,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             null,
             requestExecutor,
             Consumer<Location>() {
-                Handler(Looper.getMainLooper()).post { block(it ?: return@post) }
+                Handler(Looper.getMainLooper()).post { block(it) }
             })
     }
 

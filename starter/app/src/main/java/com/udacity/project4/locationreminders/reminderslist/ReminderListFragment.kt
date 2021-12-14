@@ -1,5 +1,6 @@
 package com.udacity.project4.locationreminders.reminderslist
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,9 +9,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import com.firebase.ui.auth.AuthUI
+import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.R
+import com.udacity.project4.authentication.AuthenticationActivity
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentRemindersBinding
@@ -79,17 +82,27 @@ class ReminderListFragment : BaseFragment() {
         when (item.itemId) {
             R.id.logout -> {
                 logoutFromApp()
-                // TODO: Check if this is going to navigate back to Authentication Activity
-                Navigation.findNavController(binding.root.rootView)
-                    .navigate(R.id.authenticationActivity)
             }
         }
         return super.onOptionsItemSelected(item)
-
     }
 
     private fun logoutFromApp() {
-        AuthUI.getInstance().signOut(requireContext())
+        AuthUI.getInstance()
+            .signOut(requireContext())
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val activity = requireActivity()
+                    startActivity(Intent(activity, AuthenticationActivity::class.java))
+                    activity.finish()
+                } else {
+                    Snackbar.make(
+                        requireView(),
+                        getString(R.string.authentication_logOutFailed),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
