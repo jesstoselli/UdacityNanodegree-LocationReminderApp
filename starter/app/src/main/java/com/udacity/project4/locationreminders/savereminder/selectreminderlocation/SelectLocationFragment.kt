@@ -15,7 +15,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
@@ -116,12 +115,12 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
 
-//        map.setMapStyle(
-//            MapStyleOptions.loadRawResourceStyle(
-//                requireContext(),
-//                R.map.map_style
-//            )
-//        )
+        map.setMapStyle(
+            MapStyleOptions.loadRawResourceStyle(
+                requireContext(),
+                R.raw.map_style
+            )
+        )
 
         setMapStartingPosition {
             selectLocationViewModel.defineSelectedLocation(null, LatLng(it.latitude, it.longitude))
@@ -136,8 +135,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
         val circleOptions = CircleOptions()
             .center(map.cameraPosition.target)
-            .fillColor(ResourcesCompat.getColor(resources, R.color.map_radius_fill_color, null))
-            .strokeColor(ResourcesCompat.getColor(resources, R.color.map_radius_stroke_color, null))
+            .fillColor(ResourcesCompat.getColor(resources, R.color.mapRadiusFillColor, null))
+            .strokeColor(ResourcesCompat.getColor(resources, R.color.mapRadiusStrokeColor, null))
             .strokeWidth(4f)
             .radius(GEOFENCE_RADIUS_IN_METERS.toDouble())
 
