@@ -14,12 +14,15 @@ import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
+import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.geofence.GeofenceBroadcastReceiver.Companion.GEOFENCE_RADIUS_IN_METERS
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
@@ -51,13 +54,11 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private val requestExecutor by lazy { Executors.newSingleThreadExecutor() }
 
-
-    private val TAG = SelectLocationFragment::class.java.simpleName
-    private val REQUEST_LOCATION_PERMISSION = 1
+    //    private val TAG = SelectLocationFragment::class.java.simpleName
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
 
@@ -69,24 +70,33 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
-
-//        add the map setup implementation
-//        zoom to the user location after taking his permission
-//        TODO: add style to the map
-//        put a marker to location that the user selected
-
+        settingUpGoogleMaps()
 
         return binding.root
     }
 
     private fun onLocationSelected() {
-        //        TODO: When the user confirms on the selected location,
-        //         send back the selected location details to the view model
-        //         and navigate back to the previous fragment to save the reminder and add the geofence
+        _viewModel.run {
+            setSelectedLocation(selectLocationViewModel.selectedLocation.value!!)
+            navigationCommand.postValue(NavigationCommand.Back)
 
-//        _viewModel.
+        }
     }
 
+    private fun settingUpGoogleMaps() {
+        val fragment =
+            childFragmentManager.findFragmentByTag(getString(R.string.reminders_mapFragment)) as? SupportMapFragment
+                ?: return
+
+        selectedLocationCircle.radius = GEOFENCE_RADIUS_IN_METERS.toDouble()
+
+        selectLocationViewModel.selectedLocation.observe(viewLifecycleOwner, Observer { poi ->
+            selectedLocationMarker.position = poi.latLng
+            selectedLocationCircle.center = poi.latLng
+        })
+
+        fragment.getMapAsync(this)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.map_options, menu)
@@ -172,8 +182,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun setMapStartingPosition(block: (Location) -> Unit) {
-        val GPS_PROVIDER = LocationManager.GPS_PROVIDER
-
         if (permissionsGranted) {
             locationManager?.getLastKnownLocation(GPS_PROVIDER)?.let {
                 block(it)
@@ -185,7 +193,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             GPS_PROVIDER,
             null,
             requestExecutor,
-            Consumer<Location>() {
+            Consumer<Location> {
                 Handler(Looper.getMainLooper()).post { block(it) }
             })
     }
@@ -199,7 +207,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         // Check if location permissions are granted and if so enable the
         // location data layer.
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.size > 0 && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+            if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 isMyLocationEnabled()
             }
         }
@@ -208,16 +216,16 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private fun isMyLocationEnabled() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 requireContext(),
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
                 requireActivity(),
-                arrayOf<String>(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ),
                 REQUEST_LOCATION_PERMISSION
@@ -226,5 +234,11 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             permissionsGranted = true
             map.isMyLocationEnabled = true
         }
+    }
+
+    companion object {
+        private const val GPS_PROVIDER = LocationManager.GPS_PROVIDER
+        private const val REQUEST_LOCATION_PERMISSION = 1
+//        private val TAG = SelectLocationFragment::class.java.simpleName
     }
 }

@@ -59,7 +59,7 @@
     <!-- Reminder Screen -->
     <string name="location"><u>See location on map</u></string>
     <string name="reminders_yourReminders">Your Reminders</string>
-    <string name="map_fragment">map_fragment</string>
+    <string name="reminders_mapFragment">map_fragment</string>
 
     <!-- Select Location Screen -->
     <string name="selectLocation_saveThisLocation">Save this location</string>

@@ -1,6 +1,7 @@
 package com.udacity.project4.locationreminders.savereminder
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.PointOfInterest
@@ -21,7 +22,8 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
 
     private val _selectedPOI = MutableLiveData<PointOfInterest>()
 
-
+    val selectedPOI: LiveData<PointOfInterest>
+        get() = _selectedPOI
 
     val latitude = MutableLiveData<Double>()
     val longitude = MutableLiveData<Double>()
@@ -36,6 +38,10 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
         _selectedPOI.value = null
         latitude.value = null
         longitude.value = null
+    }
+
+    fun setSelectedLocation(poi: PointOfInterest) {
+        _selectedPOI.value = poi
     }
 
     /**
@@ -72,7 +78,7 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
     /**
      * Validate the entered data and show error to the user if there's any invalid data
      */
-    fun validateEnteredData(reminderData: ReminderDataItem): Boolean {
+    private fun validateEnteredData(reminderData: ReminderDataItem): Boolean {
         if (reminderData.title.isNullOrEmpty()) {
             showSnackBarInt.value = R.string.err_enter_title
             return false
