@@ -9,7 +9,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.R
@@ -25,7 +26,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ReminderListFragment : BaseFragment() {
     //use Koin to retrieve the ViewModel instance
     override val _viewModel: RemindersListViewModel by viewModel()
+
     private lateinit var binding: FragmentRemindersBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -81,33 +84,33 @@ class ReminderListFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logout -> {
-                logoutFromApp()
+                AuthUI.getInstance().signOut(requireContext())
             }
         }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun logoutFromApp() {
-        AuthUI.getInstance()
-            .signOut(requireContext())
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val activity = requireActivity()
-                    startActivity(Intent(activity, AuthenticationActivity::class.java))
-                    activity.finish()
-                } else {
-                    Snackbar.make(
-                        requireView(),
-                        getString(R.string.authentication_logOutFailed),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            }
+        return NavigationUI.onNavDestinationSelected(item, requireView().findNavController()) || super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.main_menu, menu)
     }
+
+//    private fun logoutFromApp() {
+//        AuthUI.getInstance()
+//            .signOut(requireContext())
+//            .addOnCompleteListener {
+//                if (it.isSuccessful) {
+//                    val activity = requireActivity()
+//                    startActivity(Intent(activity, AuthenticationActivity::class.java))
+//                    activity.finish()
+//                } else {
+//                    Snackbar.make(
+//                        requireView(),
+//                        getString(R.string.authentication_logOutFailed),
+//                        Snackbar.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//    }
 
 }

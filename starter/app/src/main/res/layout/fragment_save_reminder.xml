@@ -29,12 +29,12 @@
             android:background="@drawable/round_corners_title"
             android:fontFamily="@font/roboto_medium"
             android:padding="@dimen/padding_small"
+            android:text="@string/saveReminder_newReminder"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="New reminder" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/et_reminderTitle"

@@ -60,6 +60,7 @@ class SaveReminderFragment : BaseFragment() {
 
     private fun requestGeofence(newReminderDataItem: ReminderDataItem) {
         val geofence = Geofence.Builder()
+            .setExpirationDuration(Geofence.NEVER_EXPIRE)
             .setRequestId(newReminderDataItem.id)
             .setCircularRegion(
                 newReminderDataItem.latitude!!,
@@ -67,6 +68,7 @@ class SaveReminderFragment : BaseFragment() {
                 GEOFENCE_RADIUS_IN_METERS
             )
             .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+            .setLoiteringDelay(30000)
             .build()
 
 

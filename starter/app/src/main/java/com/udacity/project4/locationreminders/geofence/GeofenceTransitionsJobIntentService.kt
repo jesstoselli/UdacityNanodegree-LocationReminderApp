@@ -12,9 +12,9 @@ import com.udacity.project4.locationreminders.data.dto.Result
 import com.udacity.project4.locationreminders.data.local.RemindersLocalRepository
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 import com.udacity.project4.utils.sendNotification
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
+import kotlin.coroutines.CoroutineContext
 
 class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
 
@@ -44,22 +44,20 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
         }
 
         if (event.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-            Log.v(TAG, getString(R.string.geofence_entered))
-            event.triggeringGeofences.forEach {
-                sendNotification(it)
-            }
+            Log.v(TAG, applicationContext.getString(R.string.geofence_entered))
+            sendNotification(event.triggeringGeofences)
         }
     }
 
-    //    private fun sendNotification(triggeringGeofences: List<Geofence>) {
-    private fun sendNotification(geofence: Geofence) {
+    private fun sendNotification(triggeringGeofences: List<Geofence>) {
+        val requestId = triggeringGeofences[0].requestId
 
-        //Get the local repository instance
+        // Get the local repository instance
         val remindersLocalRepository: RemindersLocalRepository by inject()
-//        Interaction to the repository has to be through a coroutine scope
+        // Interaction to the repository has to be through a coroutine scope
         CoroutineScope(coroutineContext).launch(SupervisorJob()) {
             //get the reminder with the request id
-            val result = remindersLocalRepository.getReminder(geofence.requestId)
+            val result = remindersLocalRepository.getReminder(requestId)
             if (result is Result.Success<ReminderDTO>) {
                 val reminderDTO = result.data
                 //send a notification to the user with the reminder details
