@@ -76,5 +76,6 @@
     <string name="accessibility_fabSaveReminder">FAB Save reminder</string>
     <string name="accessibility_fabAddReminder">FAB Add reminder</string>
     <string name="saveReminder_newReminder">New reminder</string>
+    <string name="don_t_have_an_account_sign_up"><u>Don\'t have an account? Sign up!</u></string>
 
 </resources>

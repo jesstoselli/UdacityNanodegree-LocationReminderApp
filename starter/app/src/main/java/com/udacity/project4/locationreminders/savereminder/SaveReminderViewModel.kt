@@ -21,7 +21,6 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
     val selectedPOI = MutableLiveData<PointOfInterest>()
     val latitude = MutableLiveData<Double>()
     val longitude = MutableLiveData<Double>()
-//    val radius = GEOFENCE_RADIUS_IN_METERS.toDouble()
 
     /**
      * Clear the live data objects to start fresh next time the view model gets called
@@ -64,8 +63,7 @@ class SaveReminderViewModel(val app: Application, private val dataSource: Remind
             )
             showLoading.value = false
             showToast.value = app.getString(R.string.reminder_saved)
-            navigationCommand.value = NavigationCommand.Back
-//            navigationCommand.value = NavigationCommand.To(SaveReminderFragmentDirections.actionSaveReminderFragmentToReminderListFragment())
+            navigationCommand.value = NavigationCommand.To(SaveReminderFragmentDirections.actionSaveReminderFragmentToReminderListFragment())
         }
     }
 

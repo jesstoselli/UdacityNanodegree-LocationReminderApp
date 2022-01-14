@@ -84,10 +84,13 @@ class ReminderListFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logout -> {
-                AuthUI.getInstance().signOut(requireContext())
+                logoutFromApp()
             }
         }
-        return NavigationUI.onNavDestinationSelected(item, requireView().findNavController()) || super.onOptionsItemSelected(item)
+        return NavigationUI.onNavDestinationSelected(
+            item,
+            requireView().findNavController()
+        ) || super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -95,22 +98,24 @@ class ReminderListFragment : BaseFragment() {
         inflater.inflate(R.menu.main_menu, menu)
     }
 
-//    private fun logoutFromApp() {
-//        AuthUI.getInstance()
-//            .signOut(requireContext())
-//            .addOnCompleteListener {
-//                if (it.isSuccessful) {
+    private fun logoutFromApp() {
+        AuthUI.getInstance()
+            .signOut(requireContext())
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val myIntent = Intent(requireContext(), AuthenticationActivity::class.java)
+                    startActivity(myIntent)
 //                    val activity = requireActivity()
 //                    startActivity(Intent(activity, AuthenticationActivity::class.java))
 //                    activity.finish()
-//                } else {
-//                    Snackbar.make(
-//                        requireView(),
-//                        getString(R.string.authentication_logOutFailed),
-//                        Snackbar.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
-//    }
+                } else {
+                    Snackbar.make(
+                        requireView(),
+                        getString(R.string.authentication_logOutFailed),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+    }
 
 }

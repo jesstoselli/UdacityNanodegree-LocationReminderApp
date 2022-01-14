@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -22,16 +23,33 @@ class AuthenticationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAuthenticationBinding
 
+    private val viewModel by viewModels<AuthenticationViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityAuthenticationBinding.inflate(layoutInflater)
+
+        binding.btnLoginRegister.setOnClickListener {
+            launchSignInFlow()
+        }
 
         isUserLoggedIn()
         launchSignInFlow()
     }
 
     private fun isUserLoggedIn() {
+        viewModel.authenticationState.observe(this, Observer { authState ->
+
+            if (authState == AuthenticationViewModel.AuthenticationState.AUTHENTICATED) {
+                startActivity(Intent(this, RemindersActivity::class.java))
+                finish()
+            } else {
+                launchSignInFlow()
+            }
+        })
+
+
         val firebaseAuthentication = FirebaseAuth.getInstance()
 
         if (firebaseAuthentication.currentUser != null) {
@@ -42,18 +60,14 @@ class AuthenticationActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == SIGN_IN_RESULT_CODE) {
             val response = IdpResponse.fromResultIntent(data)
-
             if (resultCode == Activity.RESULT_OK) {
+                // User successfully signed in
                 Log.i(
                     TAG,
-                    "Successfully signed in user ${FirebaseAuth.getInstance().currentUser?.displayName}"
+                    "Successfully signed in user ${FirebaseAuth.getInstance().currentUser?.displayName}!"
                 )
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                startActivity(Intent(this, AuthenticationActivity::class.java))
-                finish()
             } else {
                 Log.i(TAG, "Sign in unsuccessful ${response?.error?.errorCode}")
             }
@@ -70,17 +84,37 @@ class AuthenticationActivity : AppCompatActivity() {
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setAuthMethodPickerLayout(
-                    AuthMethodPickerLayout
-                        .Builder(R.layout.layout_auth_picker)
-                        .setGoogleButtonId(R.id.btn_signInWithGoogle)
-                        .setEmailButtonId(R.id.btn_signInWithEmail)
-                        .build()
-                )
-                .setTheme(R.style.AppTheme)
                 .build(),
             SIGN_IN_RESULT_CODE
         )
+
+//        AuthUI.getInstance()
+//            .createSignInIntentBuilder()
+//            .setAvailableProviders(providers)
+//            .setAuthMethodPickerLayout(
+//                AuthMethodPickerLayout
+//                    .Builder(R.layout.layout_auth_picker)
+//                    .setGoogleButtonId(R.id.btn_signInWithGoogle)
+//                    .setEmailButtonId(R.id.btn_signInWithEmail)
+//                    .build()
+//            )
+//            .build()
+
+//        startActivityForResult(
+//            AuthUI.getInstance()
+//                .createSignInIntentBuilder()
+//                .setAvailableProviders(providers)
+//                .setAuthMethodPickerLayout(
+//                    AuthMethodPickerLayout
+//                        .Builder(R.layout.layout_auth_picker)
+//                        .setGoogleButtonId(R.id.btn_signInWithGoogle)
+//                        .setEmailButtonId(R.id.btn_signInWithEmail)
+//                        .build()
+//                )
+//                .setTheme(R.style.AppTheme)
+//                .build(),
+//            SIGN_IN_RESULT_CODE
+//        )
     }
 
     companion object {
