@@ -9,6 +9,7 @@ import com.udacity.project4.locationreminders.MainCoroutineRule
 import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.resumeDispatcher
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.junit.Before
@@ -44,7 +45,7 @@ class SaveReminderViewModelTest {
     @Test
     fun saveReminderViewModel_loadingSuccessful() {
         // GIVEN
-        mainCoroutineRule.pauseDispatcher()
+        mainCoroutineRule.dispatcher.pauseDispatcher()
 
         // WHEN
         saveReminderViewModel.validateAndSaveReminder(fakeDataSource.reminderData)

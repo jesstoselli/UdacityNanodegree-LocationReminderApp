@@ -46,6 +46,82 @@ class RemindersDaoTest {
     )
 
     @Test
+    fun getReminders_successful() = runTest {
+        // GIVEN - database has two entries
+        val reminder1 = ReminderDTO(
+            title = "Millennium Centre",
+            description = "Description",
+            location = "Location",
+            latitude = 45.toDouble(),
+            longitude = 12.toDouble()
+        )
+
+        val reminder2 = ReminderDTO(
+        title = "Millennium Stadium",
+        description = "Description",
+        location = "Location",
+        latitude = 45.toDouble(),
+        longitude = 12.toDouble()
+        )
+
+        database.reminderDao().saveReminder(reminder1)
+        database.reminderDao().saveReminder(reminder2)
+
+        // WHEN - users tries to retrieve all entries
+        val remindersList = database.reminderDao().getReminders()
+
+        // THEN - all reminders should be displayed
+        assertThat(remindersList).hasSize(2)
+        assertThat(remindersList).contains(reminder1)
+        assertThat(remindersList).contains(reminder2)
+    }
+
+    @Test
+    fun getReminders_withSaveStrategyResolution() = runTest {
+        // GIVEN - database receives two entries with the same id
+        val reminder1 = reminderDTO.copy(title = "Millennium Centre")
+        val reminder2 = reminderDTO.copy(title = "Millennium Stadium")
+        database.reminderDao().saveReminder(reminder1)
+        database.reminderDao().saveReminder(reminder2)
+
+        // WHEN - users tries to retrieve all entries
+        val remindersList = database.reminderDao().getReminders()
+
+        // THEN - only the second saved reminder should be presented
+        assertThat(remindersList).hasSize(1)
+        assertThat(remindersList).contains(reminder2)
+    }
+
+    @Test
+    fun getReminderById_successful() = runTest {
+        // GIVEN - database has two entries
+        val reminder1 = ReminderDTO(
+            title = "Millennium Centre",
+            description = "Description",
+            location = "Location",
+            latitude = 45.toDouble(),
+            longitude = 12.toDouble()
+        )
+
+        val reminder2 = ReminderDTO(
+            title = "Millennium Stadium",
+            description = "Description",
+            location = "Location",
+            latitude = 45.toDouble(),
+            longitude = 12.toDouble()
+        )
+
+        database.reminderDao().saveReminder(reminder1)
+        database.reminderDao().saveReminder(reminder2)
+
+        // WHEN - users tries to retrieve all entries
+        val retrievedReminder = database.reminderDao().getReminderById(reminder1.id)
+
+        // THEN - all reminders should be displayed
+        assertThat(retrievedReminder).isEqualTo(reminder1)
+    }
+
+    @Test
     fun saveReminder_successful() = runTest {
         // GIVEN - database is empty
         database.reminderDao().deleteAllReminders()
