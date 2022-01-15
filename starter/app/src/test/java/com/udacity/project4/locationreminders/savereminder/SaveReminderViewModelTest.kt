@@ -42,6 +42,20 @@ class SaveReminderViewModelTest {
     }
 
     @Test
+    fun saveReminderViewModel_loadingSuccessful() {
+        // GIVEN
+        mainCoroutineRule.pauseDispatcher()
+
+        // WHEN
+        saveReminderViewModel.validateAndSaveReminder(fakeDataSource.reminderData)
+        assertThat(saveReminderViewModel.showLoading.getOrAwaitValue()).isTrue()
+        mainCoroutineRule.resumeDispatcher()
+
+        // THEN
+        assertThat(saveReminderViewModel.showLoading.getOrAwaitValue()).isFalse()
+    }
+
+    @Test
     fun saveReminder_successful() {
         // GIVEN - a ReminderDataItem
 
