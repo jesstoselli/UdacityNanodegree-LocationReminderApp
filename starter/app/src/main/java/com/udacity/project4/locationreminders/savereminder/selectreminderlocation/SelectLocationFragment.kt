@@ -28,7 +28,7 @@ import java.util.*
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     //Use Koin to get the view model of the SaveReminder
-    override val _viewModel: SaveReminderViewModel by inject()
+    override val baseViewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSelectLocationBinding
 
     private lateinit var map: GoogleMap
@@ -41,7 +41,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
 
         with(binding) {
-            viewModel = _viewModel
+            viewModel = baseViewModel
             lifecycleOwner = this@SelectLocationFragment
             btnSaveThisLocation.setOnClickListener { onLocationSelected() }
         }
@@ -58,7 +58,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private fun onLocationSelected() {
 
         if (this::poi.isInitialized) {
-            with(_viewModel) {
+            with(baseViewModel) {
                 latitude.value = poi.latLng.latitude
                 longitude.value = poi.latLng.longitude
                 reminderSelectedLocationStr.value = poi.name

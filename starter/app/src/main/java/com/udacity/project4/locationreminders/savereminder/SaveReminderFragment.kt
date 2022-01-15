@@ -39,7 +39,7 @@ import org.koin.android.ext.android.inject
 
 class SaveReminderFragment : BaseFragment() {
     //Get the view model this time as a single to be shared with the another fragment
-    override val _viewModel: SaveReminderViewModel by inject()
+    override val baseViewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSaveReminderBinding
 
     private val runningQ = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
@@ -56,7 +56,7 @@ class SaveReminderFragment : BaseFragment() {
 
         setDisplayHomeAsUpEnabled(true)
 
-        binding.viewModel = _viewModel
+        binding.viewModel = baseViewModel
 
         return binding.root
     }
@@ -67,22 +67,22 @@ class SaveReminderFragment : BaseFragment() {
         binding.lifecycleOwner = this
         binding.tvSelectLocation.setOnClickListener {
             // Navigate to another fragment to get the user location
-            _viewModel.navigationCommand.value =
+            baseViewModel.navigationCommand.value =
                 NavigationCommand.To(SaveReminderFragmentDirections.actionSaveReminderFragmentToSelectLocationFragment())
         }
 
         geofencingClient = LocationServices.getGeofencingClient(requireContext())
 
         binding.fabSaveReminder.setOnClickListener {
-            val title = _viewModel.reminderTitle.value
-            val description = _viewModel.reminderDescription.value
-            val location = _viewModel.reminderSelectedLocationStr.value
-            val latitude = _viewModel.latitude.value
-            val longitude = _viewModel.longitude.value
+            val title = baseViewModel.reminderTitle.value
+            val description = baseViewModel.reminderDescription.value
+            val location = baseViewModel.reminderSelectedLocationStr.value
+            val latitude = baseViewModel.latitude.value
+            val longitude = baseViewModel.longitude.value
 
             newReminder = ReminderDataItem(title, description, location, latitude, longitude)
 
-            if (_viewModel.validateAndSaveReminder((newReminder))) {
+            if (baseViewModel.validateAndSaveReminder((newReminder))) {
                 requestGeofence()
             }
         }
@@ -239,7 +239,7 @@ class SaveReminderFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        _viewModel.onClear()
+        baseViewModel.onClear()
     }
 
     companion object {
