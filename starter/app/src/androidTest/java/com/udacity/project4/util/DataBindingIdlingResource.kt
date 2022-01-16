@@ -73,18 +73,22 @@ class DataBindingIdlingResource : IdlingResource {
      * Find all binding classes in all currently available fragments.
      */
     private fun getBindings(): List<ViewDataBinding> {
-        val fragments = (activity as? FragmentActivity)
-            ?.supportFragmentManager
-            ?.fragments
+        if (this::activity.isInitialized) {
+            val fragments = (activity as? FragmentActivity)
+                ?.supportFragmentManager
+                ?.fragments
 
-        val bindings =
-            fragments?.mapNotNull {
-                it.view?.getBinding()
-            } ?: emptyList()
-        val childrenBindings = fragments?.flatMap { it.childFragmentManager.fragments }
-            ?.mapNotNull { it.view?.getBinding() } ?: emptyList()
+            val bindings =
+                fragments?.mapNotNull {
+                    it.view?.getBinding()
+                } ?: emptyList()
+            val childrenBindings = fragments?.flatMap { it.childFragmentManager.fragments }
+                ?.mapNotNull { it.view?.getBinding() } ?: emptyList()
 
-        return bindings + childrenBindings
+            return bindings + childrenBindings
+        }
+
+        return listOf<ViewDataBinding>()
     }
 }
 
