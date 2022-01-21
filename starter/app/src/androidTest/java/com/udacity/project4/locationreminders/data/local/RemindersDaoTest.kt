@@ -57,11 +57,11 @@ class RemindersDaoTest {
         )
 
         val reminder2 = ReminderDTO(
-        title = "Millennium Stadium",
-        description = "Description",
-        location = "Location",
-        latitude = 45.toDouble(),
-        longitude = 12.toDouble()
+            title = "Millennium Stadium",
+            description = "Description",
+            location = "Location",
+            latitude = 45.toDouble(),
+            longitude = 12.toDouble()
         )
 
         database.reminderDao().saveReminder(reminder1)

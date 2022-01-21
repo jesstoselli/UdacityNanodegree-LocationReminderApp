@@ -3,7 +3,6 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 import android.Manifest
 import android.content.pm.PackageManager
 import android.content.res.Resources
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -32,7 +31,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentSelectLocationBinding
 
     private lateinit var map: GoogleMap
-    private lateinit var poi: PointOfInterest
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -43,32 +41,28 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         with(binding) {
             viewModel = baseViewModel
             lifecycleOwner = this@SelectLocationFragment
-            btnSaveThisLocation.setOnClickListener { onLocationSelected() }
+            btnSaveThisLocation.setOnClickListener {
+                baseViewModel.navigationCommand.value =
+                    NavigationCommand.To(SelectLocationFragmentDirections.actionSelectLocationFragmentToSaveReminderFragment())
+            }
         }
 
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.fragment_map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         return binding.root
     }
 
-    private fun onLocationSelected() {
-
-        if (this::poi.isInitialized) {
-            with(baseViewModel) {
-                latitude.value = poi.latLng.latitude
-                longitude.value = poi.latLng.longitude
-                reminderSelectedLocationStr.value = poi.name
-                selectedPOI.value = poi
-                navigationCommand.value =
-                    NavigationCommand.To(SelectLocationFragmentDirections.actionSelectLocationFragmentToSaveReminderFragment())
-            }
-        } else {
-            Toast.makeText(context, "Please, select a location to proceed.", Toast.LENGTH_LONG)
-                .show()
+    private fun onLocationSelected(poi: PointOfInterest) {
+        with(baseViewModel) {
+            latitude.value = poi.latLng.latitude
+            longitude.value = poi.latLng.longitude
+            reminderSelectedLocationStr.value = poi.name
+            selectedPOI.value = poi
         }
     }
 
@@ -115,26 +109,18 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun setPoiClick(map: GoogleMap) {
-        map.setOnPoiClickListener { poi ->
+        map.setOnPoiClickListener { it ->
             map.clear()
-            this.poi = poi
 
             val poiMarker = map.addMarker(
                 MarkerOptions()
-                    .position(poi.latLng)
-                    .title(poi.name)
+                    .position(it.latLng)
+                    .title(it.name)
+                    .snippet("${it.latLng.latitude},${it.latLng.longitude}")
                     .draggable(true)
             )
             poiMarker?.showInfoWindow()
-
-            map.addCircle(
-                CircleOptions()
-                    .center(poi.latLng)
-                    .radius(177.0)
-                    .strokeColor(Color.argb(10, 102, 103, 171))
-                    .fillColor(Color.argb(1, 102, 103, 171))
-                    .strokeWidth(3F)
-            )
+            onLocationSelected(it)
         }
     }
 
@@ -155,6 +141,12 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                     .snippet(snippet)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
             )
+
+            baseViewModel.latitude.value = coordinates.latitude
+            baseViewModel.longitude.value = coordinates.longitude
+            baseViewModel.reminderSelectedLocationStr.value = getString(R.string.dropped_pin)
+            baseViewModel.selectedPOI.value =
+                PointOfInterest(LatLng(coordinates.latitude, coordinates.longitude), "", "")
         }
     }
 

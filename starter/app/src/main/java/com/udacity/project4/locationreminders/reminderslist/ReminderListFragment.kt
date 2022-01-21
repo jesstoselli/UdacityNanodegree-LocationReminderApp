@@ -105,9 +105,6 @@ class ReminderListFragment : BaseFragment() {
                 if (it.isSuccessful) {
                     val myIntent = Intent(requireContext(), AuthenticationActivity::class.java)
                     startActivity(myIntent)
-//                    val activity = requireActivity()
-//                    startActivity(Intent(activity, AuthenticationActivity::class.java))
-//                    activity.finish()
                 } else {
                     Snackbar.make(
                         requireView(),

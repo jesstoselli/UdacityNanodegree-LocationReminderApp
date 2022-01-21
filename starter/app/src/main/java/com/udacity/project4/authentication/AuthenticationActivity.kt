@@ -87,34 +87,6 @@ class AuthenticationActivity : AppCompatActivity() {
                 .build(),
             SIGN_IN_RESULT_CODE
         )
-
-//        AuthUI.getInstance()
-//            .createSignInIntentBuilder()
-//            .setAvailableProviders(providers)
-//            .setAuthMethodPickerLayout(
-//                AuthMethodPickerLayout
-//                    .Builder(R.layout.layout_auth_picker)
-//                    .setGoogleButtonId(R.id.btn_signInWithGoogle)
-//                    .setEmailButtonId(R.id.btn_signInWithEmail)
-//                    .build()
-//            )
-//            .build()
-
-//        startActivityForResult(
-//            AuthUI.getInstance()
-//                .createSignInIntentBuilder()
-//                .setAvailableProviders(providers)
-//                .setAuthMethodPickerLayout(
-//                    AuthMethodPickerLayout
-//                        .Builder(R.layout.layout_auth_picker)
-//                        .setGoogleButtonId(R.id.btn_signInWithGoogle)
-//                        .setEmailButtonId(R.id.btn_signInWithEmail)
-//                        .build()
-//                )
-//                .setTheme(R.style.AppTheme)
-//                .build(),
-//            SIGN_IN_RESULT_CODE
-//        )
     }
 
     companion object {

@@ -7,12 +7,11 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.pressBack
+import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -118,7 +117,9 @@ class RemindersActivityTest :
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
         onView(withId(R.id.tv_title)).check(matches(isDisplayed()))
+        onView(withText("Cardiff Castle")).check(matches(isDisplayed()))
         onView(withId(R.id.tv_description)).check(matches(isDisplayed()))
+        onView(withText("Oldest castle in Wales.")).check(matches(isDisplayed()))
         onView(withId(R.id.tv_location)).check(matches(isDisplayed()))
     }
 
@@ -128,36 +129,23 @@ class RemindersActivityTest :
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
         onView(withId(R.id.addReminderFAB)).perform(click())
-
-        onView(withId(R.id.et_reminderTitle)).perform(typeText("Millennium Centre"))
-        onView(withId(R.id.et_reminderDescription))
-            .perform(
-                typeText(
-                    "Wales Millennium Centre is the national arts... "
-                )
-            )
-        Espresso.closeSoftKeyboard()
         onView(withId(R.id.tv_selectLocation)).perform(click())
 
         Thread.sleep(3000)
+        onView(withId(R.id.fragment_map)).perform(longClick())
 
-        // HOW THE FUCK DO WE MAKE THIS WORK?
-        onView(withContentDescription("Google Map Stout")).perform(click());
-        onView(withId(R.id.btn_saveThisLocation)).perform(click());
-//        onView(withId(R.id.map)).perform(click(pressBack()))
+        onView(withId(R.id.btn_saveThisLocation)).perform(click())
 
-        Thread.sleep(3000)
+        onView(withId(R.id.et_reminderTitle)).perform(typeText("Millennium Centre"))
+        onView(withId(R.id.et_reminderDescription))
+            .perform(typeText("Wales Millennium Centre description."))
+
+        Espresso.closeSoftKeyboard()
 
         onView(withId(R.id.fab_saveReminder)).perform(click())
-
         onView(withId(R.id.tv_noDataTextView))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        onView(withText("Millennium Centre"))
-            .check(matches(isDisplayed()))
-        onView(
-            withText(
-                "Wales Millennium Centre is the national arts... "
-            )
-        ).check(matches(isDisplayed()))
+        onView(withText("Millennium Centre")).check(matches(isDisplayed()))
+        onView(withText("Wales Millennium Centre description.")).check(matches(isDisplayed()))
     }
 }

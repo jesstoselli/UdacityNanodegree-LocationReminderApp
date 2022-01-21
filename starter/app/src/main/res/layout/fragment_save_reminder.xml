@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/accessibility_backgroundImageDescription"
-            android:src="@drawable/round_corners_background_orange" />
+            android:src="@drawable/round_corners_background_purple" />
 
         <TextView
             android:id="@+id/tv_newReminderTitle"
@@ -92,7 +92,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginRight="@dimen/margin_normal"
             android:text="@{viewModel.reminderSelectedLocationStr}"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/tv_selectLocation"
