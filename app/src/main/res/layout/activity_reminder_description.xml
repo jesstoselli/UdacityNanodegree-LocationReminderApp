@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <!--Data item that holds the reminder details-->
+        <variable
+            name="reminderDataItem"
+            type="com.udacity.project4.locationreminders.reminderslist.ReminderDataItem" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/padding_normal"
+        android:layout_marginTop="@dimen/padding_normal"
+        android:layout_marginEnd="@dimen/padding_normal"
+        android:background="@drawable/round_corners_background_purple"
+        android:orientation="vertical"
+        tools:context=".locationreminders.ReminderDescriptionActivity">
+
+        <TextView
+            android:id="@+id/tv_reminderDetailTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_corners_title"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:padding="@dimen/padding_small"
+            android:text="@={reminderDataItem.title}"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="Supermarket" />
+
+        <TextView
+            android:id="@+id/tv_reminderDetailDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
+            android:padding="@dimen/padding_small"
+            android:text="@={reminderDataItem.description}"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_normal"
+            tools:text="Carrefour neighbourhood, offering all sorts of goods for your daily life." />
+
+        <TextView
+            android:id="@+id/tv_reminderDetailLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
+            android:padding="@dimen/padding_medium"
+            android:textStyle="bold"
+            android:text="@string/location"
+            android:textColor="@color/colorSecondaryDark"
+            android:textSize="@dimen/text_size_normal" />
+
+<!--        <androidx.fragment.app.FragmentContainerView-->
+<!--            android:id="@+id/map"-->
+<!--            android:name="com.google.android.gms.maps.SupportMapFragment"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            tools:context=".SelectLocationFragment" />-->
+
+    </LinearLayout>
+</layout>

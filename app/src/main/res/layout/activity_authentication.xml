@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_image"
+    android:orientation="vertical"
+    android:padding="@dimen/margin_normal"
+    tools:context=".authentication.AuthenticationActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="@dimen/margin_double"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="10dp"
+        tools:targetApi="lollipop">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:padding="@dimen/padding_small"
+            android:text="@string/authentication_loginRequired"
+            android:textAllCaps="true"
+            android:textColor="@color/colorSecondary"
+            android:textSize="@dimen/text_size_large"
+            app:drawableTopCompat="@drawable/ic_launcher_foreground" />
+
+    </androidx.cardview.widget.CardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btn_loginRegister"
+        style="@style/AuthenticationButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_margin="@dimen/margin_double"
+        android:elevation="@dimen/padding_tiny"
+        android:text="@string/authentication_registerOrLogin"
+        android:textAllCaps="true" />
+</LinearLayout>
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:background="@drawable/bg_image"-->
+    <!--    tools:context=".authentication.AuthenticationActivity">-->
+
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/linearLayout_signUp"-->
+    <!--        android:layout_width="272dp"-->
+    <!--        android:layout_height="365dp"-->
+    <!--        android:background="@drawable/round_corners_orange"-->
+    <!--        android:orientation="vertical"-->
+    <!--        android:visibility="gone"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/tv_signUpForANewAccount"-->
+    <!--            style="@style/header"-->
+    <!--            android:gravity="center_horizontal"-->
+    <!--            android:text="@string/authentication_signUpForANewAccount"-->
+    <!--            android:textAlignment="center" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/tv_labelForEmail"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="@dimen/margin_normal"-->
+    <!--            android:layout_marginLeft="@dimen/margin_normal"-->
+    <!--            android:layout_marginTop="@dimen/margin_normal"-->
+    <!--            android:layout_marginEnd="@dimen/margin_normal"-->
+    <!--            android:layout_marginRight="@dimen/margin_normal"-->
+    <!--            android:fontFamily="@font/roboto_light"-->
+    <!--            android:text="@string/authentication_email"-->
+    <!--            android:textColor="@color/colorPrimary" />-->
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/et_email"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="@dimen/margin_normal"-->
+    <!--            android:layout_marginLeft="@dimen/margin_normal"-->
+    <!--            android:layout_marginEnd="@dimen/margin_normal"-->
+    <!--            android:layout_marginRight="@dimen/margin_normal"-->
+    <!--            android:autofillHints="true"-->
+    <!--            android:background="@drawable/round_corners_input_text"-->
+    <!--            android:hint="@string/accessibility_editTextEmail"-->
+    <!--            android:inputType="textEmailAddress" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/tv_labelForPassword"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="@dimen/margin_normal"-->
+    <!--            android:layout_marginLeft="@dimen/margin_normal"-->
+    <!--            android:layout_marginTop="@dimen/margin_normal"-->
+    <!--            android:layout_marginEnd="@dimen/margin_normal"-->
+    <!--            android:layout_marginRight="@dimen/margin_normal"-->
+    <!--            android:fontFamily="@font/roboto_light"-->
+    <!--            android:text="@string/authentication_password"-->
+    <!--            android:textColor="@color/colorPrimary" />-->
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/et_password"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="30dp"-->
+    <!--            android:layout_marginStart="@dimen/margin_normal"-->
+    <!--            android:layout_marginLeft="@dimen/margin_normal"-->
+    <!--            android:layout_marginEnd="@dimen/margin_normal"-->
+    <!--            android:layout_marginRight="@dimen/margin_normal"-->
+    <!--            android:autofillHints="true"-->
+    <!--            android:background="@drawable/round_corners_input_text"-->
+    <!--            android:hint="@string/accessibility_editTextPassword"-->
+    <!--            android:inputType="textPassword" />-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/btn_signUp"-->
+    <!--            style="@style/SignUpButton"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="@dimen/margin_normal"-->
+    <!--            android:layout_marginLeft="@dimen/margin_normal"-->
+    <!--            android:layout_marginTop="@dimen/margin_normal"-->
+    <!--            android:layout_marginEnd="@dimen/margin_normal"-->
+    <!--            android:layout_marginRight="@dimen/margin_normal"-->
+    <!--            android:elevation="@dimen/padding_tiny"-->
+    <!--            android:gravity="center"-->
+    <!--            android:text="@string/authentication_signup" />-->
+
+    <!--        <TextView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="@dimen/margin_normal"-->
+    <!--            android:layout_marginLeft="@dimen/margin_normal"-->
+    <!--            android:layout_marginEnd="@dimen/margin_normal"-->
+    <!--            android:layout_marginRight="@dimen/margin_normal"-->
+    <!--            android:layout_marginBottom="@dimen/margin_normal"-->
+    <!--            android:fontFamily="@font/roboto_light"-->
+    <!--            android:gravity="center_horizontal"-->
+    <!--            android:text="@string/authentication_message"-->
+    <!--            android:textAlignment="center"-->
+    <!--            android:textColor="@color/colorPrimary"-->
+    <!--            android:textSize="@dimen/text_size_tiny" />-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/tv_signUpWithGoogle"-->
+    <!--            style="@style/SignUpButton"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="@dimen/margin_normal"-->
+    <!--            android:layout_marginLeft="@dimen/margin_normal"-->
+    <!--            android:layout_marginEnd="@dimen/margin_normal"-->
+    <!--            android:layout_marginRight="@dimen/margin_normal"-->
+    <!--            android:drawableStart="@drawable/google_icon"-->
+    <!--            android:drawableLeft="@drawable/google_icon"-->
+    <!--            android:elevation="@dimen/padding_tiny"-->
+    <!--            android:text="@string/authentication_signUpWithGoogle" />-->
+
+    <!--    </LinearLayout>-->
+
+    <!--    <Button-->
+    <!--        android:id="@+id/btn_signInWithEmail"-->
+    <!--        style="@style/AuthenticationButton"-->
+    <!--        android:layout_width="240dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:drawableStart="@drawable/ic_email"-->
+    <!--        android:drawableLeft="@drawable/ic_email"-->
+    <!--        android:elevation="@dimen/padding_tiny"-->
+    <!--        android:text="@string/authentication_signInWithEmail"-->
+    <!--        android:visibility="visible"-->
+    <!--        app:layout_constraintBottom_toTopOf="@id/btn_signInWithGoogle"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+    <!--    <Button-->
+    <!--        android:id="@+id/btn_signInWithGoogle"-->
+    <!--        style="@style/AuthenticationButton"-->
+    <!--        android:layout_width="240dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:drawableStart="@drawable/google_icon"-->
+    <!--        android:drawableLeft="@drawable/google_icon"-->
+    <!--        android:elevation="@dimen/padding_tiny"-->
+    <!--        android:text="@string/authentication_signInWithGoogle"-->
+    <!--        android:visibility="visible"-->
+    <!--        app:layout_constraintBottom_toTopOf="@id/tv_signup"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_signup"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginBottom="@dimen/margin_double"-->
+    <!--        android:fontFamily="@font/roboto_medium"-->
+    <!--        android:text="@string/authentication_signUpForANewAccountUnderlined"-->
+    <!--        android:textColor="@color/colorSecondaryDark"-->
+    <!--        android:visibility="visible"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
