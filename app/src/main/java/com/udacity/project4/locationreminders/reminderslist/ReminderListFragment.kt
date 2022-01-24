@@ -1,5 +1,6 @@
 package com.udacity.project4.locationreminders.reminderslist
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +9,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.firebase.ui.auth.AuthUI
-import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.udacity.project4.R
 import com.udacity.project4.authentication.AuthenticationActivity
 import com.udacity.project4.base.BaseFragment
@@ -28,6 +30,11 @@ class ReminderListFragment : BaseFragment() {
     override val baseViewModel: RemindersListViewModel by viewModel()
 
     private lateinit var binding: FragmentRemindersBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        checkFirebaseAuthentication()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,12 +56,28 @@ class ReminderListFragment : BaseFragment() {
         return binding.root
     }
 
+    private fun checkFirebaseAuthentication(): Boolean {
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            val intent = Intent(context, AuthenticationActivity::class.java)
+            startActivity(intent)
+            return false
+        }
+        return true
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         setupRecyclerView()
         binding.addReminderFAB.setOnClickListener {
             navigateToAddReminder()
+        }
+        if (checkFirebaseAuthentication()) {
+            Toast.makeText(
+                context,
+                "Welcome, ${FirebaseAuth.getInstance().currentUser?.displayName}!",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -81,10 +104,20 @@ class ReminderListFragment : BaseFragment() {
         binding.remindersRecyclerView.setup(adapter)
     }
 
+    private fun logout(context: Context) {
+        AuthUI.getInstance()
+            .signOut(context)
+            .addOnCompleteListener {
+                val intent =
+                    Intent(activity, AuthenticationActivity::class.java)
+                startActivity(intent)
+            }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logout -> {
-                logoutFromApp()
+                logout(requireContext())
             }
         }
         return NavigationUI.onNavDestinationSelected(
@@ -97,22 +130,4 @@ class ReminderListFragment : BaseFragment() {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.main_menu, menu)
     }
-
-    private fun logoutFromApp() {
-        AuthUI.getInstance()
-            .signOut(requireContext())
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val myIntent = Intent(requireContext(), AuthenticationActivity::class.java)
-                    startActivity(myIntent)
-                } else {
-                    Snackbar.make(
-                        requireView(),
-                        getString(R.string.authentication_logOutFailed),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            }
-    }
-
 }

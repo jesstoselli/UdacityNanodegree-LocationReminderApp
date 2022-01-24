@@ -53,7 +53,7 @@
     <string name="authentication_signUpWithGoogle">Sign up with Google</string>
     <string name="authentication_logOutFailed">Logout failed</string>
     <string name="authentication_loginMethod">Select your preferred login method.</string>
-    <string name="authentication_registerOrLogin">Sing in or register</string>
+    <string name="authentication_registerOrLogin">Sign in or register</string>
     <string name="authentication_loginRequired">Welcome! Please, sign in or register for a new account.</string>
 
     <!-- Reminder Screen -->
