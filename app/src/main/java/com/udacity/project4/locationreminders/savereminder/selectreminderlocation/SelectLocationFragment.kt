@@ -1,20 +1,29 @@
 package com.udacity.project4.locationreminders.savereminder.selectreminderlocation
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.annotation.TargetApi
+import android.app.Activity
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationRequest.PRIORITY_LOW_POWER
+import com.google.android.gms.location.LocationRequest.create
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
@@ -77,7 +86,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
         setMapLongClick(map)
 
-        isMyLocationEnabled()
+        enableMyLocation()
+//        isMyLocationEnabled()
     }
 
     private fun setMapStartingPosition(map: GoogleMap) {
@@ -109,7 +119,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun setPoiClick(map: GoogleMap) {
-        map.setOnPoiClickListener { it ->
+        map.setOnPoiClickListener {
             map.clear()
 
             val poiMarker = map.addMarker(
@@ -150,48 +160,140 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-    private fun isMyLocationEnabled() {
-        when {
-            (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED) -> {
-                map.isMyLocationEnabled = true
-            }
-            (ActivityCompat.shouldShowRequestPermissionRationale(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )) -> {
-                requestPermissions(
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    FINE_LOCATION_ACCESS_REQUEST_CODE
-                )
-            }
-            else ->
-                requestPermissions(
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    FINE_LOCATION_ACCESS_REQUEST_CODE
-                )
-        }
+    private fun isAccessFineLocationPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<String>,
+        permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                isMyLocationEnabled()
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_ACCESS_BACKGROUND_LOCATION) {
+            checkDeviceLocationSettings()
+        }
+    }
+
+    private fun checkDeviceLocationSettings(resolve: Boolean = true) {
+        val locationRequest = create().apply {
+            priority = PRIORITY_LOW_POWER
+        }
+        val requestBuilder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+        val settingsClient = LocationServices.getSettingsClient(requireActivity())
+        val locationSettingsResponseTask =
+            settingsClient.checkLocationSettings(requestBuilder.build())
+        locationSettingsResponseTask.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException && resolve) {
+                try {
+                    exception.startResolutionForResult(
+                        requireActivity(),
+                        REQUEST_TURN_DEVICE_LOCATION_ON
+                    )
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Log.d(TAG, "Error getting location settings resolution: " + sendEx.message)
+                }
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Location permission not granted.",
-                    Toast.LENGTH_LONG
-                ).show()
+                Snackbar.make(
+                    requireView(),
+                    R.string.location_required_error, Snackbar.LENGTH_INDEFINITE
+                ).setAction(android.R.string.ok) {
+                    checkDeviceLocationSettings()
+                }.show()
+            }
+
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun enableMyLocation() {
+        if (isAccessFineLocationPermissionGranted()) {
+            map.isMyLocationEnabled = true
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                checkDeviceLocationSettings()
+            } else {
+                requestQPermission()
+            }
+
+        } else {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
+        }
+        map.moveCamera(CameraUpdateFactory.zoomIn())
+    }
+
+    @TargetApi(Build.VERSION_CODES.Q)
+    private fun requestQPermission() {
+        val hasForegroundPermission = ActivityCompat.checkSelfPermission(
+            requireActivity(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (hasForegroundPermission) {
+            val hasBackgroundPermission = ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+            if (hasBackgroundPermission) {
+                checkDeviceLocationSettings()
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+                    REQUEST_ACCESS_BACKGROUND_LOCATION
+                )
             }
         }
     }
+
+//    private fun isMyLocationEnabled() {
+//        when {
+//            (ActivityCompat.checkSelfPermission(
+//                requireContext(),
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ) == PackageManager.PERMISSION_GRANTED) -> {
+//                map.isMyLocationEnabled = true
+//            }
+//            (ActivityCompat.shouldShowRequestPermissionRationale(
+//                requireActivity(),
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            )) -> {
+//                requestPermissions(
+//                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+//                    FINE_LOCATION_ACCESS_REQUEST_CODE
+//                )
+//            }
+//            else ->
+//                requestPermissions(
+//                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+//                    FINE_LOCATION_ACCESS_REQUEST_CODE
+//                )
+//        }
+//    }
+
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<String>,
+//        grantResults: IntArray
+//    ) {
+//        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+//            if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+//                isMyLocationEnabled()
+//            } else {
+//                Toast.makeText(
+//                    requireContext(),
+//                    "Location permission not granted.",
+//                    Toast.LENGTH_LONG
+//                ).show()
+//            }
+//        }
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.map_options, menu)
@@ -219,7 +321,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
-        private const val FINE_LOCATION_ACCESS_REQUEST_CODE = 1
+        private const val REQUEST_ACCESS_BACKGROUND_LOCATION = 677
+        private const val REQUEST_TURN_DEVICE_LOCATION_ON = 678
         private val TAG = SelectLocationFragment::class.java.simpleName
     }
 }
