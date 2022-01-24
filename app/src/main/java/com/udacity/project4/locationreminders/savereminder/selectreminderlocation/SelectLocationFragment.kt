@@ -4,13 +4,16 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
+import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -40,6 +43,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentSelectLocationBinding
 
     private lateinit var map: GoogleMap
+
+    private val runningQOrLater = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -87,7 +92,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         setMapLongClick(map)
 
         enableMyLocation()
-//        isMyLocationEnabled()
     }
 
     private fun setMapStartingPosition(map: GoogleMap) {
@@ -120,8 +124,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener {
-            map.clear()
-
             val poiMarker = map.addMarker(
                 MarkerOptions()
                     .position(it.latLng)
@@ -136,7 +138,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun setMapLongClick(map: GoogleMap) {
         map.setOnMapLongClickListener { coordinates ->
-            map.clear()
             val snippet = String.format(
                 Locale.getDefault(),
                 getString(R.string.lat_long_snippet),
@@ -160,6 +161,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
+    // BORROWED CODE
     private fun isAccessFineLocationPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
             requireContext(),
@@ -204,7 +206,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                     checkDeviceLocationSettings()
                 }.show()
             }
-
         }
     }
 
@@ -225,7 +226,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 REQUEST_LOCATION_PERMISSION
             )
         }
-        map.moveCamera(CameraUpdateFactory.zoomIn())
+//        map.moveCamera(CameraUpdateFactory.zoomIn())
     }
 
     @TargetApi(Build.VERSION_CODES.Q)
@@ -252,6 +253,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
+//     OLD CODE
 //    private fun isMyLocationEnabled() {
 //        when {
 //            (ActivityCompat.checkSelfPermission(
@@ -276,7 +278,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 //                )
 //        }
 //    }
-
+//
 //    override fun onRequestPermissionsResult(
 //        requestCode: Int,
 //        permissions: Array<String>,
