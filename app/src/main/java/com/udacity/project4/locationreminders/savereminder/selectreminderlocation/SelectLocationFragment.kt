@@ -4,16 +4,13 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
-import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.content.res.Resources
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -43,8 +40,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentSelectLocationBinding
 
     private lateinit var map: GoogleMap
-
-    private val runningQOrLater = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -153,15 +148,16 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
             )
 
-            baseViewModel.latitude.value = coordinates.latitude
-            baseViewModel.longitude.value = coordinates.longitude
-            baseViewModel.reminderSelectedLocationStr.value = getString(R.string.dropped_pin)
-            baseViewModel.selectedPOI.value =
-                PointOfInterest(LatLng(coordinates.latitude, coordinates.longitude), "", "")
+            with(baseViewModel) {
+                latitude.value = coordinates.latitude
+                longitude.value = coordinates.longitude
+                reminderSelectedLocationStr.value = getString(R.string.dropped_pin)
+                selectedPOI.value =
+                    PointOfInterest(LatLng(coordinates.latitude, coordinates.longitude), "", "")
+            }
         }
     }
 
-    // BORROWED CODE
     private fun isAccessFineLocationPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
             requireContext(),
@@ -226,7 +222,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 REQUEST_LOCATION_PERMISSION
             )
         }
-//        map.moveCamera(CameraUpdateFactory.zoomIn())
     }
 
     @TargetApi(Build.VERSION_CODES.Q)
@@ -253,50 +248,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-//     OLD CODE
-//    private fun isMyLocationEnabled() {
-//        when {
-//            (ActivityCompat.checkSelfPermission(
-//                requireContext(),
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ) == PackageManager.PERMISSION_GRANTED) -> {
-//                map.isMyLocationEnabled = true
-//            }
-//            (ActivityCompat.shouldShowRequestPermissionRationale(
-//                requireActivity(),
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            )) -> {
-//                requestPermissions(
-//                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-//                    FINE_LOCATION_ACCESS_REQUEST_CODE
-//                )
-//            }
-//            else ->
-//                requestPermissions(
-//                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-//                    FINE_LOCATION_ACCESS_REQUEST_CODE
-//                )
-//        }
-//    }
-//
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<String>,
-//        grantResults: IntArray
-//    ) {
-//        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-//            if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-//                isMyLocationEnabled()
-//            } else {
-//                Toast.makeText(
-//                    requireContext(),
-//                    "Location permission not granted.",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//        }
-//    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.map_options, menu)
     }
@@ -322,9 +273,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     companion object {
-        private const val REQUEST_LOCATION_PERMISSION = 1
-        private const val REQUEST_ACCESS_BACKGROUND_LOCATION = 677
-        private const val REQUEST_TURN_DEVICE_LOCATION_ON = 678
         private val TAG = SelectLocationFragment::class.java.simpleName
+        private const val REQUEST_LOCATION_PERMISSION = 111
+        private const val REQUEST_ACCESS_BACKGROUND_LOCATION = 777
+        private const val REQUEST_TURN_DEVICE_LOCATION_ON = 888
     }
 }

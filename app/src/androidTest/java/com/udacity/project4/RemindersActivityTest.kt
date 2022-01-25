@@ -1,14 +1,20 @@
 package com.udacity.project4
 
 import android.app.Application
+import android.os.IBinder
+import android.view.WindowManager
+import android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+import android.view.WindowManager.LayoutParams.TYPE_TOAST
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.Root
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -26,8 +32,12 @@ import com.udacity.project4.locationreminders.reminderslist.RemindersListViewMod
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.util.DataBindingIdlingResource
 import com.udacity.project4.util.EspressoIdlingResource
+import com.udacity.project4.util.ToastMatcher
 import com.udacity.project4.util.monitorActivity
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.Description
+import org.hamcrest.Matcher
+import org.hamcrest.TypeSafeMatcher
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -38,6 +48,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.get
+
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -55,7 +66,7 @@ class RemindersActivityTest :
      * at this step we will initialize Koin related code to be able to use it in out testing.
      */
     @Before
-    fun init() {
+    fun init() = runBlocking {
         stopKoin()//stop the original app koin
         appContext = getApplicationContext()
         val myModule = module {
@@ -71,7 +82,8 @@ class RemindersActivityTest :
                     get() as ReminderDataSource
                 )
             }
-            single<ReminderDataSource> { RemindersLocalRepository(get()) }
+            single { RemindersLocalRepository(get()) as ReminderDataSource }
+            single { RemindersLocalRepository(get()) }
             single { LocalDB.createRemindersDao(appContext) }
         }
         //declare a new koin module
@@ -129,6 +141,26 @@ class RemindersActivityTest :
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
         onView(withId(R.id.addReminderFAB)).perform(click())
+        onView(withId(R.id.fab_saveReminder)).perform(click())
+
+        // Testing Snackbar for empty title
+        onView(withId(com.google.android.material.R.id.snackbar_text))
+            .check(matches(withText(R.string.err_enter_title)))
+
+        onView(withId(R.id.et_reminderTitle)).perform(typeText("Millennium Centre"))
+        onView(withId(R.id.et_reminderDescription))
+            .perform(typeText("Wales Millennium Centre description."))
+
+        Espresso.closeSoftKeyboard()
+        Thread.sleep(1000)
+
+        onView(withId(R.id.fab_saveReminder)).perform(click())
+
+        // Testing Snackbar for empty location
+        onView(withId(com.google.android.material.R.id.snackbar_text))
+            .check(matches(withText(R.string.err_select_location)))
+        Thread.sleep(2000)
+
         onView(withId(R.id.tv_selectLocation)).perform(click())
 
         Thread.sleep(3000)
@@ -136,13 +168,15 @@ class RemindersActivityTest :
 
         onView(withId(R.id.btn_saveThisLocation)).perform(click())
 
-        onView(withId(R.id.et_reminderTitle)).perform(typeText("Millennium Centre"))
-        onView(withId(R.id.et_reminderDescription))
-            .perform(typeText("Wales Millennium Centre description."))
-
-        Espresso.closeSoftKeyboard()
-
         onView(withId(R.id.fab_saveReminder)).perform(click())
+
+        // Testing Toast for reminder properly saved
+        onView(withText(R.string.reminder_saved))
+            .inRoot(ToastMatcher().apply {
+                matches(isDisplayed())
+            });
+        Thread.sleep(5000)
+
         onView(withId(R.id.tv_noDataTextView))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
         onView(withText("Millennium Centre")).check(matches(isDisplayed()))
