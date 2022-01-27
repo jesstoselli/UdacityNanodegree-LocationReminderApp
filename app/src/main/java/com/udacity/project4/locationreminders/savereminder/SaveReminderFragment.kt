@@ -20,11 +20,11 @@ import com.udacity.project4.databinding.FragmentSaveReminderBinding
 import com.udacity.project4.locationreminders.geofence.GeofenceUtils
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SaveReminderFragment : BaseFragment() {
     //Get the view model this time as a single to be shared with the another fragment
-    override val baseViewModel: SaveReminderViewModel by inject()
+    override val baseViewModel: SaveReminderViewModel by sharedViewModel()
     private lateinit var binding: FragmentSaveReminderBinding
 
     private lateinit var geofencingClient: GeofencingClient
@@ -58,6 +58,8 @@ class SaveReminderFragment : BaseFragment() {
         geofencingClient = LocationServices.getGeofencingClient(requireContext())
         geofenceUtils = GeofenceUtils(requireContext())
 
+        populateTitleFieldWithPoiInfo()
+
         binding.fabSaveReminder.setOnClickListener {
             val title = baseViewModel.reminderTitle.value
             val description = baseViewModel.reminderDescription.value
@@ -74,6 +76,12 @@ class SaveReminderFragment : BaseFragment() {
         }
     }
 
+    private fun populateTitleFieldWithPoiInfo() {
+        if (baseViewModel.reminderTitle.value.isNullOrEmpty().not()) {
+            binding.etReminderTitle.setText(baseViewModel.reminderTitle.value)
+        }
+    }
+
     @SuppressLint("MissingPermission")
     private fun createGeofence(latLng: LatLng, geofenceId: String) {
         val newGeofence =
@@ -85,7 +93,7 @@ class SaveReminderFragment : BaseFragment() {
         if (pendingIntent != null) {
             geofencingClient.addGeofences(newGeofencingRequest, pendingIntent)
                 .addOnFailureListener {
-                    val errMsg = geofenceUtils.geofenceError(it)
+                    geofenceUtils.geofenceError(it)
                     Toast.makeText(
                         context,
                         "Please, enable background location permission.",

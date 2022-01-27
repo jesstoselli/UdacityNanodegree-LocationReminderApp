@@ -62,7 +62,7 @@
     <string name="reminders_mapFragment">map_fragment</string>
 
     <!-- Select Location Screen -->
-    <string name="selectLocation_saveThisLocation">Save this location</string>
+    <string name="selectLocation_saveThisLocation">Save location</string>
     <string name="selectLocation_infoUnavailable">Info unavailable.</string>
     <string name="selectLocation_zoom">zoom</string>
 
