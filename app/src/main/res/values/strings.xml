@@ -57,7 +57,8 @@
     <string name="authentication_loginRequired">Welcome! Please, sign in or register for a new account.</string>
 
     <!-- Reminder Screen -->
-    <string name="location"><u>See location on map</u></string>
+    <string name="latitudeLabel">Latitude: </string>
+    <string name="longitudeLabel">Longitude: </string>
     <string name="reminders_yourReminders">Your Reminders</string>
     <string name="reminders_mapFragment">map_fragment</string>
 
