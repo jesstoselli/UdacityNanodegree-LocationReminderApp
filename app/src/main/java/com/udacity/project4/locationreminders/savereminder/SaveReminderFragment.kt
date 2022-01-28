@@ -86,7 +86,7 @@ class SaveReminderFragment : BaseFragment() {
 
     @SuppressLint("MissingPermission")
     private fun addGeofence(latLng: LatLng, geofenceId: String) {
-        val newGeofence = getGeofence(geofenceId, latLng, Geofence.GEOFENCE_TRANSITION_ENTER)
+        val newGeofence = getGeofence(geofenceId, latLng)
 
         val newGeofencingRequest = createGeofencingRequest(newGeofence)
 

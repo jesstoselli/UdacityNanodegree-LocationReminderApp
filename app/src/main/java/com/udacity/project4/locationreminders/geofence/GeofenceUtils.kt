@@ -28,22 +28,20 @@ fun geofenceErrorMessage(context: Context, errorCode: Int): String {
 
 fun createGeofencingRequest(geofence: Geofence): GeofencingRequest {
     return GeofencingRequest.Builder()
-        .addGeofence(geofence)
         .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+        .addGeofence(geofence)
         .build()
 }
 
 fun getGeofence(
     geofenceId: String,
-    coordinates: LatLng,
-    transitionTypes: Int
+    coordinates: LatLng
 ): Geofence {
     return Geofence.Builder()
-        .setCircularRegion(coordinates.latitude, coordinates.longitude, GEOFENCE_RADIUS_IN_METERS)
         .setRequestId(geofenceId)
-        .setTransitionTypes(transitionTypes)
-        .setLoiteringDelay(4000)
+        .setCircularRegion(coordinates.latitude, coordinates.longitude, GEOFENCE_RADIUS_IN_METERS)
         .setExpirationDuration(Geofence.NEVER_EXPIRE)
+        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
         .build()
 }
 

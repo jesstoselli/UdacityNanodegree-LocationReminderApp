@@ -30,14 +30,16 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
                 return
             }
 
-            if (geofencingEvent.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-                Log.v(TAG, context.getString(R.string.geofence_entered))
-                if (geofencingEvent.triggeringGeofences.isNotEmpty()) {
-                    GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
-                } else {
-                    Log.e(TAG, "No Geofence Trigger Found! Abort mission!")
-                }
-            }
+            GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
+
+//            if (geofencingEvent.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+//                Log.v(TAG, context.getString(R.string.geofence_entered))
+//                if (geofencingEvent.triggeringGeofences.isNotEmpty()) {
+//                    GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
+//                } else {
+//                    Log.e(TAG, "No Geofence trigger found.")
+//                }
+//            }
         }
     }
 
