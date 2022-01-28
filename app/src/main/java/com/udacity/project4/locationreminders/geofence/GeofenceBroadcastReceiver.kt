@@ -3,9 +3,11 @@ package com.udacity.project4.locationreminders.geofence
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
+import android.util.Log
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
+import com.udacity.project4.R
+import com.udacity.project4.locationreminders.RemindersActivity.Companion.ACTION_GEOFENCE_EVENT
 
 /**
  * Triggered by the Geofence.  Since we can have many Geofences at once, we pull the request
@@ -19,18 +21,27 @@ import com.google.android.gms.location.GeofencingEvent
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val geofenceEvent = GeofencingEvent.fromIntent(intent)
+        if (intent.action == ACTION_GEOFENCE_EVENT) {
+            val geofencingEvent = GeofencingEvent.fromIntent(intent)
 
-        if (geofenceEvent.hasError()) {
-            Toast.makeText(context, "Error on receiving geofence.", Toast.LENGTH_LONG).show()
-        } else if (geofenceEvent.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-            GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
-        } else {
-            return
+            if (geofencingEvent.hasError()) {
+                val errorMessage = geofenceErrorMessage(context, geofencingEvent.errorCode)
+                Log.e(TAG, errorMessage)
+                return
+            }
+
+            if (geofencingEvent.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+                Log.v(TAG, context.getString(R.string.geofence_entered))
+                if (geofencingEvent.triggeringGeofences.isNotEmpty()) {
+                    GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
+                } else {
+                    Log.e(TAG, "No Geofence Trigger Found! Abort mission!")
+                }
+            }
         }
+    }
 
-//        if (intent.action == ACTION_GEOFENCE_EVENT) {
-//            GeofenceTransitionsJobIntentService.enqueueWork(context, intent)
-//        }
+    companion object {
+        const val TAG = "GeofenceReceiver"
     }
 }

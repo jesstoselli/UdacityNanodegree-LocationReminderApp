@@ -1,6 +1,8 @@
 package com.udacity.project4.locationreminders.savereminder
 
 import android.annotation.SuppressLint
+import android.app.PendingIntent
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,7 +19,10 @@ import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSaveReminderBinding
-import com.udacity.project4.locationreminders.geofence.GeofenceUtils
+import com.udacity.project4.locationreminders.geofence.GeofenceBroadcastReceiver
+import com.udacity.project4.locationreminders.geofence.createGeofencingRequest
+import com.udacity.project4.locationreminders.geofence.geofenceErrorMessage
+import com.udacity.project4.locationreminders.geofence.getGeofence
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -30,8 +35,6 @@ class SaveReminderFragment : BaseFragment() {
     private lateinit var geofencingClient: GeofencingClient
     private lateinit var newReminder: ReminderDataItem
 
-    private lateinit var geofenceUtils: GeofenceUtils
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,7 +45,6 @@ class SaveReminderFragment : BaseFragment() {
         setDisplayHomeAsUpEnabled(true)
 
         binding.viewModel = baseViewModel
-
         return binding.root
     }
 
@@ -56,7 +58,6 @@ class SaveReminderFragment : BaseFragment() {
         }
 
         geofencingClient = LocationServices.getGeofencingClient(requireContext())
-        geofenceUtils = GeofenceUtils(requireContext())
 
         populateTitleFieldWithPoiInfo()
 
@@ -68,11 +69,12 @@ class SaveReminderFragment : BaseFragment() {
             val longitude = baseViewModel.longitude.value
 
             if (latitude != null && longitude != null && !title.isNullOrEmpty()) {
-                createGeofence(LatLng(latitude, longitude), title)
+                addGeofence(LatLng(latitude, longitude), title)
             }
 
             newReminder = ReminderDataItem(title, description, location, latitude, longitude)
             baseViewModel.validateAndSaveReminder((newReminder))
+            baseViewModel.onClear()
         }
     }
 
@@ -83,17 +85,19 @@ class SaveReminderFragment : BaseFragment() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun createGeofence(latLng: LatLng, geofenceId: String) {
-        val newGeofence =
-            geofenceUtils.getGeofence(geofenceId, latLng, Geofence.GEOFENCE_TRANSITION_ENTER)
+    private fun addGeofence(latLng: LatLng, geofenceId: String) {
+        val newGeofence = getGeofence(geofenceId, latLng, Geofence.GEOFENCE_TRANSITION_ENTER)
 
-        val newGeofencingRequest = geofenceUtils.createGeofencingRequest(newGeofence)
-        val pendingIntent = geofenceUtils.geofencePendingIntent()
+        val newGeofencingRequest = createGeofencingRequest(newGeofence)
+
+        val intent = Intent(context, GeofenceBroadcastReceiver::class.java)
+        val pendingIntent =
+            PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         if (pendingIntent != null) {
             geofencingClient.addGeofences(newGeofencingRequest, pendingIntent)
                 .addOnFailureListener {
-                    geofenceUtils.geofenceError(it)
+                    geofenceErrorMessage(requireContext(), 0) // how the fuck do I find errorCode?
                     Toast.makeText(
                         context,
                         "Please, enable background location permission.",
@@ -101,10 +105,5 @@ class SaveReminderFragment : BaseFragment() {
                     ).show()
                 }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        baseViewModel.onClear()
     }
 }

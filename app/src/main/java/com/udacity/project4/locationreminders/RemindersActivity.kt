@@ -23,4 +23,9 @@ class RemindersActivity : AppCompatActivity() {
         val navController = this.findNavController(R.id.nav_host_fragment)
         return navController.navigateUp()
     }
+
+    companion object {
+        internal const val ACTION_GEOFENCE_EVENT =
+            "LocationReminderApp.action.ACTION_GEOFENCE_EVENT"
+    }
 }

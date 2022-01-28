@@ -95,12 +95,12 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun setMapStartingPosition(map: GoogleMap) {
-        val sheffield = LatLng(53.3795459, -1.4779999)
+        val cardiff = LatLng(51.4815067, -3.1794096)
         val zoom = 15f
 
         with(map) {
-            addMarker(MarkerOptions().position(sheffield).title("Marker in Campinas, SP"))
-            moveCamera(CameraUpdateFactory.newLatLngZoom(sheffield, zoom))
+            addMarker(MarkerOptions().position(cardiff).title("Marker in Cardiff, Wales"))
+            moveCamera(CameraUpdateFactory.newLatLngZoom(cardiff, zoom))
             uiSettings.isZoomControlsEnabled = true
         }
     }
