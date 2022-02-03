@@ -13,11 +13,12 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
+import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.udacity.project4.locationreminders.RemindersActivity
+import com.udacity.project4.authentication.AuthenticationActivity
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.local.LocalDB
@@ -26,8 +27,10 @@ import com.udacity.project4.locationreminders.reminderslist.RemindersListViewMod
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.util.DataBindingIdlingResource
 import com.udacity.project4.util.EspressoIdlingResource
+import com.udacity.project4.util.ToastMatcher
 import com.udacity.project4.util.monitorActivity
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -38,6 +41,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.get
+
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -55,7 +59,7 @@ class RemindersActivityTest :
      * at this step we will initialize Koin related code to be able to use it in out testing.
      */
     @Before
-    fun init() {
+    fun init() = runBlocking {
         stopKoin()//stop the original app koin
         appContext = getApplicationContext()
         val myModule = module {
@@ -113,22 +117,71 @@ class RemindersActivityTest :
             repository.saveReminder(reminderDTO)
         }
 
-        val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
+        val activityScenario = ActivityScenario.launch(AuthenticationActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        Thread.sleep(2000)
+
+        onView(withId(R.id.btn_authenticate)).perform(click())
+        onView(withText("Sign in with email")).perform(click())
+        onView(withHint("Email")).perform(typeText("jessycatoselli@gmail.com"))
+        onView(withText("Next")).perform(click())
+        Thread.sleep(2000)
+        onView(withHint("Password")).perform(typeText("teste123"))
+        onView(allOf(withId(R.id.button_done))).perform(click())
+
+        Thread.sleep(3000)
 
         onView(withId(R.id.tv_title)).check(matches(isDisplayed()))
         onView(withText("Cardiff Castle")).check(matches(isDisplayed()))
         onView(withId(R.id.tv_description)).check(matches(isDisplayed()))
         onView(withText("Oldest castle in Wales.")).check(matches(isDisplayed()))
         onView(withId(R.id.tv_location)).check(matches(isDisplayed()))
+
+        Thread.sleep(2000)
+
+        onView(withId(R.id.logout)).perform(click())
+        activityScenario.close()
     }
 
     @Test
     fun navigateToSaveReminderScreenAndSaveANewReminder() {
-        val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
+        val activityScenario = ActivityScenario.launch(AuthenticationActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
+        Thread.sleep(2000)
+
+        onView(withId(R.id.btn_authenticate)).perform(click())
+        onView(withText("Sign in with email")).perform(click())
+        onView(withHint("Email")).perform(typeText("jessycatoselli@gmail.com"))
+        onView(withText("Next")).perform(click())
+        Thread.sleep(2000)
+        onView(withHint("Password")).perform(typeText("teste123"))
+        onView(allOf(withId(R.id.button_done))).perform(click())
+
+        Thread.sleep(3000)
+
         onView(withId(R.id.addReminderFAB)).perform(click())
+        onView(withId(R.id.fab_saveReminder)).perform(click())
+
+        // Testing Snackbar for empty title
+        onView(withId(com.google.android.material.R.id.snackbar_text))
+            .check(matches(withText(R.string.err_enter_title)))
+
+        onView(withId(R.id.et_reminderTitle)).perform(typeText("Millennium Centre"))
+        onView(withId(R.id.et_reminderDescription))
+            .perform(typeText("Wales Millennium Centre description."))
+
+        Espresso.closeSoftKeyboard()
+        Thread.sleep(1000)
+
+        onView(withId(R.id.fab_saveReminder)).perform(click())
+
+        // Testing Snackbar for empty location
+        onView(withId(com.google.android.material.R.id.snackbar_text))
+            .check(matches(withText(R.string.err_select_location)))
+        Thread.sleep(2000)
+
         onView(withId(R.id.tv_selectLocation)).perform(click())
 
         Thread.sleep(3000)
@@ -136,16 +189,21 @@ class RemindersActivityTest :
 
         onView(withId(R.id.btn_saveThisLocation)).perform(click())
 
-        onView(withId(R.id.et_reminderTitle)).perform(typeText("Millennium Centre"))
-        onView(withId(R.id.et_reminderDescription))
-            .perform(typeText("Wales Millennium Centre description."))
-
-        Espresso.closeSoftKeyboard()
-
         onView(withId(R.id.fab_saveReminder)).perform(click())
+
+        // Testing Toast for reminder properly saved
+        onView(withText(R.string.reminder_saved))
+            .inRoot(ToastMatcher().apply {
+                matches(isDisplayed())
+            })
+        Thread.sleep(5000)
+
         onView(withId(R.id.tv_noDataTextView))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
         onView(withText("Millennium Centre")).check(matches(isDisplayed()))
         onView(withText("Wales Millennium Centre description.")).check(matches(isDisplayed()))
+
+        onView(withId(R.id.logout)).perform(click())
+        activityScenario.close()
     }
 }

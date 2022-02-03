@@ -99,7 +99,6 @@ class SaveReminderFragment : BaseFragment() {
             if (reminderValidated) {
                 checkPermissionsAndStartGeofencing()
             }
-            baseViewModel.onClear()
         }
     }
 

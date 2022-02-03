@@ -31,11 +31,6 @@ class ReminderListFragment : BaseFragment() {
 
     private lateinit var binding: FragmentRemindersBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        checkFirebaseAuthentication()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,13 +66,6 @@ class ReminderListFragment : BaseFragment() {
         setupRecyclerView()
         binding.addReminderFAB.setOnClickListener {
             navigateToAddReminder()
-        }
-        if (checkFirebaseAuthentication()) {
-            Toast.makeText(
-                context,
-                "Welcome, ${FirebaseAuth.getInstance().currentUser?.displayName}!",
-                Toast.LENGTH_LONG
-            ).show()
         }
     }
 
