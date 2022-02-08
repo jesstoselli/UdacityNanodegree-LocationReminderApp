@@ -25,7 +25,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/round_corners_title"
             android:fontFamily="@font/roboto_medium"
-            android:gravity="center"
             android:padding="@dimen/padding_small"
             android:text="@={reminderDataItem.title}"
             android:textColor="@color/white"
@@ -37,31 +36,62 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
-            android:gravity="center"
             android:padding="@dimen/padding_small"
             android:text="@={reminderDataItem.description}"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_normal"
             tools:text="Carrefour neighbourhood, offering all sorts of goods for your daily life." />
 
-        <TextView
-            android:id="@+id/tv_reminderDetailLocation"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
-            android:gravity="center"
-            android:padding="@dimen/padding_medium"
-            android:textStyle="bold"
-            android:text="@string/location"
-            android:textColor="@color/colorSecondaryDark"
-            android:textSize="@dimen/text_size_normal" />
+            android:orientation="horizontal">
 
-<!--        <androidx.fragment.app.FragmentContainerView-->
-<!--            android:id="@+id/map"-->
-<!--            android:name="com.google.android.gms.maps.SupportMapFragment"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            tools:context=".SelectLocationFragment" />-->
+            <TextView
+                android:id="@+id/tv_reminderDetailLatitudeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/latitudeLabel"
+                android:textColor="@color/colorSecondaryDark"
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_reminderDetailLatitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text='@={""+reminderDataItem.latitude}'
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_normal"
+                tools:text="53.379" />
+
+            <TextView
+                android:id="@+id/tv_reminderDetailLongitudeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_medium"
+                android:fontFamily="@font/roboto"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/latitudeLabel"
+                android:textColor="@color/colorSecondaryDark"
+                android:textSize="@dimen/text_size_normal"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_reminderDetailLongitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text='@={""+reminderDataItem.longitude}'
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_normal"
+                tools:text="-1.477" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 </layout>
