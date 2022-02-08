@@ -65,7 +65,7 @@ class SaveReminderViewModelTest {
 
         // THEN
         assertThat(saveReminderViewModel.showLoading.getOrAwaitValue()).isFalse()
-        assertThat(saveReminderViewModel.showToast.getOrAwaitValue(), `is`("Reminder Saved!"))
+        assertThat(saveReminderViewModel.showToast.getOrAwaitValue(), `is`("Reminder Saveds!"))
         assertThat(saveReminderViewModel.navigationCommand.getOrAwaitValue()).isNotNull()
     }
 

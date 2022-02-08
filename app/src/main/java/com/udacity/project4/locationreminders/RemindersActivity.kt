@@ -3,7 +3,6 @@ package com.udacity.project4.locationreminders
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.udacity.project4.R
 import kotlinx.android.synthetic.main.activity_reminders.nav_host_fragment
@@ -19,13 +18,13 @@ class RemindersActivity : AppCompatActivity() {
 
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = this.findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp()
-    }
-
-    companion object {
-        internal const val ACTION_GEOFENCE_EVENT =
-            "LocationReminderApp.action.ACTION_GEOFENCE_EVENT"
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                (nav_host_fragment as NavHostFragment).navController.popBackStack()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
