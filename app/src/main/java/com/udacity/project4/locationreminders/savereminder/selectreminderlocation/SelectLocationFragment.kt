@@ -99,7 +99,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             addMarker(MarkerOptions().position(cardiff).title("Marker in Cardiff, Wales"))
             moveCamera(CameraUpdateFactory.newLatLngZoom(cardiff, zoom))
             uiSettings.isZoomControlsEnabled = true
-            uiSettings.isMyLocationButtonEnabled = false
         }
     }
 
