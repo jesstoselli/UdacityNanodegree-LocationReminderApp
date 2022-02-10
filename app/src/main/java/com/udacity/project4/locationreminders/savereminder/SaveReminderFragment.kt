@@ -54,6 +54,7 @@ class SaveReminderFragment : BaseFragment() {
 
     private lateinit var geofencingClient: GeofencingClient
     private lateinit var newReminder: ReminderDataItem
+    private lateinit var newReminderId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,11 +91,8 @@ class SaveReminderFragment : BaseFragment() {
             val latitude = baseViewModel.latitude.value
             val longitude = baseViewModel.longitude.value
 
-//            if (latitude != null && longitude != null && !title.isNullOrEmpty()) {
-//                addGeofence(LatLng(latitude, longitude), title)
-//            }
-
             newReminder = ReminderDataItem(title, description, location, latitude, longitude)
+            newReminderId = newReminder.id
             val reminderValidated = baseViewModel.validateAndSaveReminder((newReminder))
             if (reminderValidated) {
                 checkPermissionsAndStartGeofencing()
@@ -117,7 +115,7 @@ class SaveReminderFragment : BaseFragment() {
                 .reminderTitle.value.isNullOrEmpty()
         ) {
             newGeofence = getGeofence(
-                baseViewModel.reminderTitle.value!!, LatLng(
+                newReminderId, LatLng(
                     baseViewModel
                         .latitude.value!!, baseViewModel.longitude.value!!
                 )
@@ -126,18 +124,18 @@ class SaveReminderFragment : BaseFragment() {
             return
         }
 
-//        val newGeofence = getGeofence(geofenceId, latLng)
-
         val newGeofencingRequest = createGeofencingRequest(newGeofence)
 
         val intent = Intent(context, GeofenceBroadcastReceiver::class.java)
+        intent.action = ACTION_GEOFENCE_EVENT
+
         val pendingIntent =
             PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         if (pendingIntent != null) {
             geofencingClient.addGeofences(newGeofencingRequest, pendingIntent)
                 .addOnFailureListener {
-                    geofenceErrorMessage(requireContext(), 0) // how the fuck do I find errorCode?
+                    geofenceErrorMessage(requireContext(), 0)
                     Toast.makeText(
                         context,
                         "Please, enable background location permission.",

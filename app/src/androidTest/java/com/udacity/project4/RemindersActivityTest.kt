@@ -13,7 +13,6 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
-import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -30,7 +29,6 @@ import com.udacity.project4.util.EspressoIdlingResource
 import com.udacity.project4.util.ToastMatcher
 import com.udacity.project4.util.monitorActivity
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -59,7 +57,7 @@ class RemindersActivityTest :
      * at this step we will initialize Koin related code to be able to use it in out testing.
      */
     @Before
-    fun init() = runBlocking {
+    fun init() {
         stopKoin()//stop the original app koin
         appContext = getApplicationContext()
         val myModule = module {
@@ -75,7 +73,8 @@ class RemindersActivityTest :
                     get() as ReminderDataSource
                 )
             }
-            single<ReminderDataSource> { RemindersLocalRepository(get()) }
+            single { RemindersLocalRepository(get()) as ReminderDataSource }
+            single { RemindersLocalRepository(get()) }
             single { LocalDB.createRemindersDao(appContext) }
         }
         //declare a new koin module
@@ -120,27 +119,12 @@ class RemindersActivityTest :
         val activityScenario = ActivityScenario.launch(AuthenticationActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
-        Thread.sleep(2000)
-
-        onView(withId(R.id.btn_authenticate)).perform(click())
-        onView(withText("Sign in with email")).perform(click())
-        onView(withHint("Email")).perform(typeText("jessycatoselli@gmail.com"))
-        onView(withText("Next")).perform(click())
-        Thread.sleep(2000)
-        onView(withHint("Password")).perform(typeText("teste123"))
-        onView(allOf(withId(R.id.button_done))).perform(click())
-
-        Thread.sleep(3000)
-
         onView(withId(R.id.tv_title)).check(matches(isDisplayed()))
         onView(withText("Cardiff Castle")).check(matches(isDisplayed()))
         onView(withId(R.id.tv_description)).check(matches(isDisplayed()))
         onView(withText("Oldest castle in Wales.")).check(matches(isDisplayed()))
         onView(withId(R.id.tv_location)).check(matches(isDisplayed()))
 
-        Thread.sleep(2000)
-
-        onView(withId(R.id.logout)).perform(click())
         activityScenario.close()
     }
 
@@ -148,18 +132,6 @@ class RemindersActivityTest :
     fun navigateToSaveReminderScreenAndSaveANewReminder() {
         val activityScenario = ActivityScenario.launch(AuthenticationActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
-
-        Thread.sleep(2000)
-
-        onView(withId(R.id.btn_authenticate)).perform(click())
-        onView(withText("Sign in with email")).perform(click())
-        onView(withHint("Email")).perform(typeText("jessycatoselli@gmail.com"))
-        onView(withText("Next")).perform(click())
-        Thread.sleep(2000)
-        onView(withHint("Password")).perform(typeText("teste123"))
-        onView(allOf(withId(R.id.button_done))).perform(click())
-
-        Thread.sleep(3000)
 
         onView(withId(R.id.addReminderFAB)).perform(click())
         onView(withId(R.id.fab_saveReminder)).perform(click())
@@ -203,7 +175,6 @@ class RemindersActivityTest :
         onView(withText("Millennium Centre")).check(matches(isDisplayed()))
         onView(withText("Wales Millennium Centre description.")).check(matches(isDisplayed()))
 
-        onView(withId(R.id.logout)).perform(click())
         activityScenario.close()
     }
 }
